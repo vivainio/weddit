@@ -1,0 +1,17 @@
+.linkdesc {
+    color: blue;
+    
+    font-weight: bold;
+}
+
+.rtemplate {
+    display: none;
+}
+
+.linkpic {
+    float: left;    
+}
+
+.linkcontainer {
+    clear:left;
+}
