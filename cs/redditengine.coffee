@@ -15,15 +15,11 @@ class RCatView extends Backbone.View
 
     constructor: (el) ->
         @el = el
-        
-    initialize: ->
-        _.bindAll @
         @coll = new RLinkList
-        
+        _.bindAll @
         pat = $("#linktemplate").html()
-        console.log pat
-        
         @linktmpl = _.template pat
+                
         
         
     renderOne: (m) ->    
@@ -38,51 +34,58 @@ class RCatView extends Backbone.View
     render: ->
         all = $("<div>")
         @coll.each (m) =>
-            all.append renderOne m
+            all.append $(@renderOne(m))
+        
+        console.log(all)
         
         @el.empty()
         @el.append all
-                  
+
+    mkModel: (d) ->
+        m = new RLink
+        m.set d
+        #console.log m
+        m
         
-            
-        
-        
-    
-    
-    
+    addLink: (d) ->
+        m = @mkModel d
+        @coll.add m
 
 
-        
-
-
-
-class RedditEngine
+class RedditEngine    
     initialize: ->
         pat = $("#linktemplate").html()
         console.log pat
         
         @linktmpl = _.template pat
         console.log "template", @linktmpl
-        
-        root = $("div[data-catname='pics']")
-        @linkview = new RCatView(root)
-        
-        
+        @cats = []
+        @linkviews = {}
+        @mkView "pics"
+        @mkView "funny"
 
-    mkModel: (d) ->
-        m = new RLink
-        m.set d
-        console.log m
-        m
+    mkView: (name) ->
+        sel = "div[data-catname='#{name}']"
+        root = $(sel)
+        lv = new RCatView root
+        
+        @cats.push name
+        @linkviews[name]= lv        
         
         
+        
+    fetchAll: ->
+        for cat in @cats
+            @fetchLinks cat, ""
+            
     fetchLinks: (cat, qargs) ->
-        cat = "funny"
+        cat = "pics"
         selector = ""
         qargs = qargs = "jsonp=?&"
         url = "http://www.reddit.com/r/#{cat}/#{selector}.json?#{qargs} "
 
         console.log "going ajax"
+        lv = @linkviews[cat]
         $.ajax
             url: url
             jsonp: "jsonp"
@@ -90,23 +93,14 @@ class RedditEngine
             success: (resp) =>
                 items = resp.data.children
                 #all = $("<div>")
-                root = $("div[data-catname='pics']")
                 for it in items
                     d = it.data
-                    m = @mkModel d
-                    @linkview.coll.add m
-                    expanded = @linktmpl
                     
-                        linkdesc: d.title
-                        linkscore: d.score
-                        linkimg: d.thumbnail
-                        
-                    console.log expanded
+                    lv.addLink d
                     #all.append(expanded)
                     
-                root.empty()
-                root.append(all)
-                console.log items
+                #console.log items
+                lv.render()
                 
         """        
         $.getJSON url, (resp) =>
@@ -123,4 +117,4 @@ $ ->
     console.log "starting up"
     root.redditengine = reng = new RedditEngine()
     reng.initialize()
-    reng.fetchLinks "", ""
+    reng.fetchAll()        

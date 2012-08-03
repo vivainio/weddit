@@ -45,17 +45,13 @@
     __extends(RCatView, _super);
 
     function RCatView(el) {
-      this.el = el;
-    }
-
-    RCatView.prototype.initialize = function() {
       var pat;
-      _.bindAll(this);
+      this.el = el;
       this.coll = new RLinkList;
+      _.bindAll(this);
       pat = $("#linktemplate").html();
-      console.log(pat);
-      return this.linktmpl = _.template(pat);
-    };
+      this.linktmpl = _.template(pat);
+    }
 
     RCatView.prototype.renderOne = function(m) {
       var expanded;
@@ -72,10 +68,24 @@
         _this = this;
       all = $("<div>");
       this.coll.each(function(m) {
-        return all.append(renderOne(m));
+        return all.append($(_this.renderOne(m)));
       });
+      console.log(all);
       this.el.empty();
       return this.el.append(all);
+    };
+
+    RCatView.prototype.mkModel = function(d) {
+      var m;
+      m = new RLink;
+      m.set(d);
+      return m;
+    };
+
+    RCatView.prototype.addLink = function(d) {
+      var m;
+      m = this.mkModel(d);
+      return this.coll.add(m);
     };
 
     return RCatView;
@@ -92,49 +102,54 @@
       console.log(pat);
       this.linktmpl = _.template(pat);
       console.log("template", this.linktmpl);
-      root = $("div[data-catname='pics']");
-      return this.linkview = new RCatView(root);
+      this.cats = [];
+      this.linkviews = {};
+      this.mkView("pics");
+      return this.mkView("funny");
     };
 
-    RedditEngine.prototype.mkModel = function(d) {
-      var m;
-      m = new RLink;
-      m.set(d);
-      console.log(m);
-      return m;
+    RedditEngine.prototype.mkView = function(name) {
+      var lv, sel;
+      sel = "div[data-catname='" + name + "']";
+      root = $(sel);
+      lv = new RCatView(root);
+      this.cats.push(name);
+      return this.linkviews[name] = lv;
+    };
+
+    RedditEngine.prototype.fetchAll = function() {
+      var cat, _i, _len, _ref, _results;
+      _ref = this.cats;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        cat = _ref[_i];
+        _results.push(this.fetchLinks(cat, ""));
+      }
+      return _results;
     };
 
     RedditEngine.prototype.fetchLinks = function(cat, qargs) {
-      var selector, url,
+      var lv, selector, url,
         _this = this;
-      cat = "funny";
+      cat = "pics";
       selector = "";
       qargs = qargs = "jsonp=?&";
       url = "http://www.reddit.com/r/" + cat + "/" + selector + ".json?" + qargs + " ";
       console.log("going ajax");
+      lv = this.linkviews[cat];
       $.ajax({
         url: url,
         jsonp: "jsonp",
         dataType: "jsonp",
         success: function(resp) {
-          var d, expanded, it, items, m, _i, _len;
+          var d, it, items, _i, _len;
           items = resp.data.children;
-          root = $("div[data-catname='pics']");
           for (_i = 0, _len = items.length; _i < _len; _i++) {
             it = items[_i];
             d = it.data;
-            m = _this.mkModel(d);
-            _this.linkview.coll.add(m);
-            expanded = _this.linktmpl({
-              linkdesc: d.title,
-              linkscore: d.score,
-              linkimg: d.thumbnail
-            });
-            console.log(expanded);
+            lv.addLink(d);
           }
-          root.empty();
-          root.append(all);
-          return console.log(items);
+          return lv.render();
         }
       });
       return "        \n$.getJSON url, (resp) =>\n    items = resp.data.children\n    for it in items\n        console.log it";
@@ -152,7 +167,7 @@
     console.log("starting up");
     root.redditengine = reng = new RedditEngine();
     reng.initialize();
-    return reng.fetchLinks("", "");
+    return reng.fetchAll();
   });
 
 }).call(this);
