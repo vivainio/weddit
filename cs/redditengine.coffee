@@ -58,7 +58,7 @@ class RedditEngine
         console.log pat
         
         @linktmpl = _.template pat
-        console.log "template", @linktmpl
+        #console.log "template", @linktmpl
         @cats = []
         @linkviews = {}
         @mkView "pics"
@@ -78,8 +78,7 @@ class RedditEngine
         for cat in @cats
             @fetchLinks cat, ""
             
-    fetchLinks: (cat, qargs) ->
-        cat = "pics"
+    fetchLinks: (cat, qargs) ->        
         selector = ""
         qargs = qargs = "jsonp=?&"
         url = "http://www.reddit.com/r/#{cat}/#{selector}.json?#{qargs} "

@@ -101,7 +101,6 @@
       pat = $("#linktemplate").html();
       console.log(pat);
       this.linktmpl = _.template(pat);
-      console.log("template", this.linktmpl);
       this.cats = [];
       this.linkviews = {};
       this.mkView("pics");
@@ -131,7 +130,6 @@
     RedditEngine.prototype.fetchLinks = function(cat, qargs) {
       var lv, selector, url,
         _this = this;
-      cat = "pics";
       selector = "";
       qargs = qargs = "jsonp=?&";
       url = "http://www.reddit.com/r/" + cat + "/" + selector + ".json?" + qargs + " ";
