@@ -12,6 +12,10 @@ class RCat extends Backbone.Model
     defaults:
         name: "funny"
 
+class RTopicGroup extends Backbone.Collection
+    model: RCat
+
+
 class RLinkList extends Backbone.Collection
     model: RLink
     
@@ -116,7 +120,7 @@ class RedditEngine
         @linkviews = {}
         #@mkView "pics"
         #@mkView "funny"        
-        @mainview = new RCatListView id: "catlist-container"
+        @mainview = new RCatListView 
         @mainview.addCategory("pics")
         @mainview.addCategory("funny")
         @mainview.render()
