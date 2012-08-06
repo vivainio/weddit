@@ -29,24 +29,25 @@
       <!-- Main hero unit for a primary marketing message or call to action -->
       <!-- Example row of columns -->
     <div id="link-template" class="rtemplate">
-      <div class="linkcontainer">		  
+      <div class="linkcontainer" data-cid="{{cid}}">		  
 	<span class="linkdesc">{{ linkdesc }}</span>
 	<span class="linkscore"> {{ linkscore }}</span>
+	{{#if linkimg}}
 	<img class="linkpic" height="60" width="60" src="{{ linkimg }}"></img>
+	{{/if}}
       </div>		
     </div>
     
     <div id="catlist-template" class="rtemplate">
-	<div class="catlist-container">
-	    !! CatlistTemplate
+	<div class="catlist-container">	    
 	    <h2 class="catlist-heading">{{catname}}</h2>
 	    <div class="catlist-links" data-catname="{{catname}}"></div>
 	</div>
     </div>
 
     <div id="topic-group-template" class="rtemplate">
-	<div class="topic-group">
-	    <div class="tg-name">{{tgname}}</div>
+	<div class="topic-group" data-cid="{{tgid}}">
+	    <div class="tg-name" data-cid="{{tgid}}">{{tgname}}</div>
 	    <div class="tg-separator">::</div>
 	    {{#each topics}}
 	    <div class="tg-topic">{{this}}</div>
@@ -56,19 +57,6 @@
 
     
     <div id="topic-group-area">
-	<div class="topic-group">
-	    <div class="tg-name">Funny stuff</div>
-	    <div class="tg-separator">::</div>
-	    <div class="tg-topic">pics</div>
-	    <div class="tg-topic">fffffffuuuuuuuuuuuu</div>
-	</div>
-	<div class="topic-group">
-	    <div class="tg-name">Programming related</div>
-	    <div class="tg-separator">::</div>
-	    <div class="tg-topic">javascript</div>
-	    <div class="tg-topic">coffeescript</div>
-	    <div class="tg-topic">html5</div>
-	</div>	
 	
     </div>
     
@@ -78,7 +66,7 @@
       <hr>
 
       <footer>
-        <p>&copy; Company 2012</p>
+        <p>&copy; Ville M. Vainio 2012</p>
       </footer>
 
     </div> <!-- /container -->

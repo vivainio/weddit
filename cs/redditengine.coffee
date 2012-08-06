@@ -1,8 +1,6 @@
 root = window
 
-_.templateSettings = {
-  interpolate : /\{\{(.+?)\}\}/g
-};
+EventDispatcher = $({})
 
 class RLink extends Backbone.Model
     defaults:
@@ -36,6 +34,7 @@ class RTopicGroupView extends Backbone.View
             rend = @template
                 tgname: m.get "groupName"
                 topics: m.get "topics"
+                tgid: m.cid
                 
             console.log "Rendered",rend
             @$el.append rend
@@ -44,13 +43,17 @@ class RTopicGroupView extends Backbone.View
         m = new Backbone.Model groupName: name, topics: topics
         @tglist.add m
 
-    doSelect: (ev) ->
+    doSelectGroup: (ev) ->
         console.log "Click",ev
+        cid = $(ev.target).data("cid")
+        m = @tglist.getByCid cid
+        console.log m, cid
+        
+        EventDispatcher.trigger "selectCategories", [m.get "topics"]
         
     events: 
-        "click" : "doSelect"
+        "click .tg-name" : "doSelectGroup"        
     
-
 
 class RLinkList extends Backbone.Collection
     model: RLink
@@ -85,17 +88,21 @@ class RCatListView extends Backbone.View
             
             r = appended.find(".catlist-links")
             
-            if name in @singlecatviews
-                @singlecatviews[name].el = r
-            else
-                nv = new RCatView(r)
-                @singlecatviews[name] = nv
-                
-        
+            #if name in @singlecatviews
+            #    @singlecatviews[name].el = r
+            #else
+            nv = new RCatView el: r
+            @singlecatviews[name] = nv
+            
+    
         #console.log ["catlistview render", all]
         
         @$el.append(all)
         
+    
+    setCategories: (cats)->
+        console.log "setCats " + cats                
+        @categories_coll.reset ({name} for name in cats)
     
     addCategory: (name) ->
         m = new RCat
@@ -109,14 +116,12 @@ class RCatListView extends Backbone.View
     
     
 class RCatView extends Backbone.View
-
-    constructor: (el) ->
-        @el = el
+    
+    initialize: ->
         @coll = new RLinkList
         _.bindAll @
         pat = $("#link-template").html()
         @linktmpl = Handlebars.compile pat
-                
         
         
     renderOne: (m) ->    
@@ -125,6 +130,7 @@ class RCatView extends Backbone.View
             linkdesc: m.get "title"
             linkscore: m.get "score"
             linkimg: m.get "thumbnail"
+            cid: m.cid
             
         expanded
     
@@ -135,8 +141,8 @@ class RCatView extends Backbone.View
         
         console.log(all)
         
-        @el.empty()
-        @el.append all
+        @$el.empty()
+        @$el.append all
 
     mkModel: (d) ->
         m = new RLink
@@ -165,20 +171,17 @@ class RedditEngine
         @tgview.render()
         
         
-        @mainview = new RCatListView 
-        @mainview.addCategory("pics")
-        @mainview.addCategory("funny")
-        @mainview.render()
-        
+        @mainview = mv = new RCatListView
+        #mv.setCategories ["pics", "javascript"]
+        #@mainview.addCategory("pics")
+        #@mainview.addCategory("funny")
+        #@mainview.render()
 
-    mkView: (name) ->
-        sel = "div[data-catname='#{name}']"
-        root = $(sel)
-        lv = new RCatView root
-        
-        @cats.push name
-        @linkviews[name]= lv        
-        
+        EventDispatcher.bind "selectCategories", (ev, cats) =>
+            console.log "Trigger",cats
+            mv.setCategories (cats)
+            mv.render()
+            @fetchAll()
         
         
     fetchAll: ->
