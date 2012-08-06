@@ -11,6 +11,7 @@ class RLink extends Backbone.Model
 class RLinkList extends Backbone.Collection
     model: RLink
     
+    
 class RCatView extends Backbone.View
 
     constructor: (el) ->
