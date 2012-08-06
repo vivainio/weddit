@@ -8,8 +8,63 @@ class RLink extends Backbone.Model
     defaults:
         linkdesc: "no description"
 
+class RCat extends Backbone.Model
+    defaults:
+        name: "funny"
+
 class RLinkList extends Backbone.Collection
     model: RLink
+    
+class RCatList extends Backbone.Collection
+    model: RCat
+    
+class RCatListView extends Backbone.View    
+    constructor:  ->
+        
+        @el = $("#catlist-container")
+        _.bindAll @        
+        @categories_coll = new RCatList
+        pat = $("#catlist-template").html()
+        @catlisttmpl = Handlebars.compile pat
+        @singlecatviews = {}
+        
+            
+        
+    render: ->
+        @el.empty()
+        
+        all = $('<div class="gen-cat-list-container">')
+        @categories_coll.each (m) =>            
+            
+            name = m.get "name"
+            rendered = @catlisttmpl
+                catname: name
+             
+            appended = $(rendered).appendTo(all)
+            
+            r = appended.find(".catlist-links")
+            
+            if name in @singlecatviews
+                @singlecatviews[name].el = r
+            else
+                nv = new RCatView(r)
+                @singlecatviews[name] = nv
+                
+        
+        #console.log ["catlistview render", all]
+        
+        @el.append(all)
+        
+    
+    addCategory: (name) ->
+        m = new RCat
+        m.set "name": name
+        @categories_coll.add m
+    
+    getView: (name) -> @singlecatviews[name]
+        
+    categories: -> @categories_coll
+        
     
     
 class RCatView extends Backbone.View
@@ -18,8 +73,8 @@ class RCatView extends Backbone.View
         @el = el
         @coll = new RLinkList
         _.bindAll @
-        pat = $("#linktemplate").html()
-        @linktmpl = _.template pat
+        pat = $("#link-template").html()
+        @linktmpl = Handlebars.compile pat
                 
         
         
@@ -54,16 +109,18 @@ class RCatView extends Backbone.View
 
 
 class RedditEngine    
-    initialize: ->
-        pat = $("#linktemplate").html()
-        console.log pat
-        
-        @linktmpl = _.template pat
+    initialize: ->        
+        #@linktmpl = _.template pat
         #console.log "template", @linktmpl
         @cats = []
         @linkviews = {}
-        @mkView "pics"
-        @mkView "funny"
+        #@mkView "pics"
+        #@mkView "funny"        
+        @mainview = new RCatListView id: "catlist-container"
+        @mainview.addCategory("pics")
+        @mainview.addCategory("funny")
+        @mainview.render()
+        
 
     mkView: (name) ->
         sel = "div[data-catname='#{name}']"
@@ -76,8 +133,8 @@ class RedditEngine
         
         
     fetchAll: ->
-        for cat in @cats
-            @fetchLinks cat, ""
+        
+        @mainview.categories().each (m) => @fetchLinks m.get "name",""
             
     fetchLinks: (cat, qargs) ->        
         selector = ""
@@ -85,7 +142,7 @@ class RedditEngine
         url = "http://www.reddit.com/r/#{cat}/#{selector}.json?#{qargs} "
 
         console.log "going ajax"
-        lv = @linkviews[cat]
+        lv = @mainview.getView(cat)
         $.ajax
             url: url
             jsonp: "jsonp"

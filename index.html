@@ -19,8 +19,9 @@
 	<script src="lib/jquery-1.7.2.js"></script>
 	<script src="lib/underscore.js"></script>
 	<script src="lib/backbone.js"></script>
-	
+	<script src="lib/handlebars-1.0.0.beta.6.js"></script>	
 	<script src="js/redditengine.js"></script>
+	
 </head>
 <body>
     <div class="navbar navbar-fixed-top">
@@ -47,39 +48,35 @@
 
       <!-- Main hero unit for a primary marketing message or call to action -->
       <!-- Example row of columns -->
-    <div id="linktemplate" class="rtemplate">
+    <div id="link-template" class="rtemplate">
       <div class="linkcontainer">		  
 	<span class="linkdesc">{{ linkdesc }}</span>
 	<span class="linkscore"> {{ linkscore }}</span>
 	<img class="linkpic" height="60" width="60" src="{{ linkimg }}"></img>
       </div>		
     </div>
-
-    <div 
-      <div class="row">
-        <div class="span4">
-          <h2>pics</h2>
-	  <div data-catname="pics"></div>
-	  
-	  <div>Link2</div>
-	           
-          <p><a class="btn" href="#">View details &raquo;</a></p>
-        </div>
+    
+    <div id="catlist-template" class="rtemplate">
+	<div class="catlist-container">
+	    !! CatlistTemplate
+	    <h2 class="catlist-heading">{{catname}}</h2>
+	    <div class="catlist-links" data-catname="{{catname}}"></div>
+	</div>
+    </div>
+    
+    <div id="catlist-container">
+      <div class="catlist">
 	
-        <div class="span4">	
-          <h2>funny</h2>
-	  <div data-catname="funny"></div>
-	  <div>Link2</div>
-	  <div>Link3</div>           
-          <p><a class="btn" href="#">View details &raquo;</a></p>
-       </div>
-        <div class="span4">
-          <h2>html5</h2>
-          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-          <p><a class="btn" href="#">View details &raquo;</a></p>
-        </div>
+	<!-- an example for category -->
+	<h2 class="catlist-heading">pics</h2>
+	<div data-catname="pics"></div>
+	
+	<div>... links go here ...</div>
+		 
+	<p><a class="btn" href="#">View details &raquo;</a></p>
       </div>
-
+     </div>
+     
       <hr>
 
       <footer>
