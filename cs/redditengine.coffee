@@ -2,6 +2,8 @@ root = window
 
 EventDispatcher = $({})
 
+logg = ->
+
 class RLink extends Backbone.Model
     defaults:
         linkdesc: "no description"
@@ -36,7 +38,7 @@ class RTopicGroupView extends Backbone.View
                 topics: m.get "topics"
                 tgid: m.cid
                 
-            console.log "Rendered",rend
+            logg "Rendered",rend
             @$el.append rend
             
     addTg: (name, topics) ->
@@ -44,10 +46,10 @@ class RTopicGroupView extends Backbone.View
         @tglist.add m
 
     doSelectGroup: (ev) ->
-        console.log "Click",ev
+        
         cid = $(ev.target).data("cid")
         m = @tglist.getByCid cid
-        console.log m, cid
+        
         
         EventDispatcher.trigger "selectCategories", [m.get "topics"]
         
@@ -100,8 +102,7 @@ class RCatListView extends Backbone.View
         @$el.append(all)
         
     
-    setCategories: (cats)->
-        console.log "setCats " + cats                
+    setCategories: (cats)->        
         @categories_coll.reset ({name} for name in cats)
     
     addCategory: (name) ->
@@ -138,8 +139,7 @@ class RCatView extends Backbone.View
         all = $("<div>")
         @coll.each (m) =>
             all.append $(@renderOne(m))
-        
-        console.log(all)
+                
         
         @$el.empty()
         @$el.append all
@@ -177,8 +177,7 @@ class RedditEngine
         #@mainview.addCategory("funny")
         #@mainview.render()
 
-        EventDispatcher.bind "selectCategories", (ev, cats) =>
-            console.log "Trigger",cats
+        EventDispatcher.bind "selectCategories", (ev, cats) =>            
             mv.setCategories (cats)
             mv.render()
             @fetchAll()
@@ -193,7 +192,7 @@ class RedditEngine
         qargs = qargs = "jsonp=?&"
         url = "http://www.reddit.com/r/#{cat}/#{selector}.json?#{qargs} "
 
-        console.log "going ajax"
+        
         lv = @mainview.getView(cat)
         $.ajax
             url: url
@@ -223,7 +222,7 @@ root.RedditEngine = RedditEngine
 reng = null
     
 $ ->
-    console.log "starting up"
+    logg "starting up"
     root.redditengine = reng = new RedditEngine()
     reng.initialize()
     reng.fetchAll()        
