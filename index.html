@@ -28,24 +28,24 @@
 
       <!-- Main hero unit for a primary marketing message or call to action -->
       <!-- Example row of columns -->
-    <div id="link-template" class="rtemplate">
+    <script id="link-template" type="text/x-handlebars-template">
       <div class="linkcontainer" data-cid="{{cid}}">		  
 	<span class="linkdesc">{{ linkdesc }}</span>
 	<span class="linkscore"> {{ linkscore }}</span>
 	{{#if linkimg}}
-	<img class="linkpic" height="60" width="60" src="{{ linkimg }}"></img>
+	<img class="linkpic" height="60" width="60" src="{{linkimg}}"></img>
 	{{/if}}
       </div>		
-    </div>
+    </script>
+    <script id="catlist-template" type="text/x-handlebars-template">
     
-    <div id="catlist-template" class="rtemplate">
 	<div class="catlist-container">	    
 	    <h2 class="catlist-heading">{{catname}}</h2>
 	    <div class="catlist-links" data-catname="{{catname}}"></div>
 	</div>
-    </div>
+    </script>
 
-    <div id="topic-group-template" class="rtemplate">
+    <script id="topic-group-template" type="text/x-handlebars-template">    
 	<div class="topic-group" data-cid="{{tgid}}">
 	    <div class="tg-name" data-cid="{{tgid}}">{{tgname}}</div>
 	    <div class="tg-separator">::</div>
@@ -53,7 +53,7 @@
 	    <div class="tg-topic">{{this}}</div>
 	    {{/each}}
 	</div>
-    </div>
+    </script>
 
     
     <div id="topic-group-area">
