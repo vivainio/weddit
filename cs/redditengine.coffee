@@ -12,8 +12,44 @@ class RCat extends Backbone.Model
     defaults:
         name: "funny"
 
-class RTopicGroup extends Backbone.Collection
-    model: RCat
+
+class RTopicGroup extends Backbone.Model
+    defaults:
+        groupName: "mygroup"
+        topics: ["pics", "funny"]
+
+class RTopicGroupList extends Backbone.Collection
+    model: RTopicGroup
+    
+class RTopicGroupView extends Backbone.View
+    el: "#topic-group-area"
+    
+    initialize: ->
+        pat = $("#topic-group-template").html()
+        @template = Handlebars.compile pat        
+        @tglist = new RTopicGroupList
+        
+    render: ->
+        @$el.empty()
+        
+        @tglist.each (m) =>
+            rend = @template
+                tgname: m.get "groupName"
+                topics: m.get "topics"
+                
+            console.log "Rendered",rend
+            @$el.append rend
+            
+    addTg: (name, topics) ->
+        m = new Backbone.Model groupName: name, topics: topics
+        @tglist.add m
+
+    doSelect: (ev) ->
+        console.log "Click",ev
+        
+    events: 
+        "click" : "doSelect"
+    
 
 
 class RLinkList extends Backbone.Collection
@@ -22,10 +58,11 @@ class RLinkList extends Backbone.Collection
 class RCatList extends Backbone.Collection
     model: RCat
     
-class RCatListView extends Backbone.View    
-    constructor:  ->
-        
-        @el = $("#catlist-container")
+class RCatListView extends Backbone.View
+
+    el: "#catlist-container"
+    
+    initialize:  ->                
         _.bindAll @        
         @categories_coll = new RCatList
         pat = $("#catlist-template").html()
@@ -35,7 +72,7 @@ class RCatListView extends Backbone.View
             
         
     render: ->
-        @el.empty()
+        @$el.empty()
         
         all = $('<div class="gen-cat-list-container">')
         @categories_coll.each (m) =>            
@@ -57,7 +94,7 @@ class RCatListView extends Backbone.View
         
         #console.log ["catlistview render", all]
         
-        @el.append(all)
+        @$el.append(all)
         
     
     addCategory: (name) ->
@@ -119,7 +156,15 @@ class RedditEngine
         @cats = []
         @linkviews = {}
         #@mkView "pics"
-        #@mkView "funny"        
+        #@mkView "funny"
+        
+        @tgview = tg = new RTopicGroupView
+        tg.addTg "Funny stuff", ["pics", "fffffffuuuuuuuuuuuu"]
+        tg.addTg "Programming", ["javascript", "html5", "coffeescript"]
+        
+        @tgview.render()
+        
+        
         @mainview = new RCatListView 
         @mainview.addCategory("pics")
         @mainview.addCategory("funny")

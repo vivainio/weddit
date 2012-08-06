@@ -43,6 +43,17 @@
 	    <div class="catlist-links" data-catname="{{catname}}"></div>
 	</div>
     </div>
+
+    <div id="topic-group-template" class="rtemplate">
+	<div class="topic-group">
+	    <div class="tg-name">{{tgname}}</div>
+	    <div class="tg-separator">::</div>
+	    {{#each topics}}
+	    <div class="tg-topic">{{this}}</div>
+	    {{/each}}
+	</div>
+    </div>
+
     
     <div id="topic-group-area">
 	<div class="topic-group">
