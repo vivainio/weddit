@@ -126,9 +126,9 @@ class RCatView extends Backbone.View
     doSelect: (ev) ->
         
         cid = $(ev.currentTarget).data("cid")
-        console.log ev, cid
+        #console.log ev, cid
         m = @coll.getByCid cid
-        console.log m
+        #console.log m
         url = m.get "url"
         window.open url
         
@@ -220,7 +220,7 @@ class RedditEngine
                 #all = $("<div>")
                 for it in items
                     d = it.data
-                    console.log d
+                    #console.log d
                     
                     lv.addLink d
                     #all.append(expanded)

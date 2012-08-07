@@ -248,9 +248,7 @@
     RCatView.prototype.doSelect = function(ev) {
       var cid, m, url;
       cid = $(ev.currentTarget).data("cid");
-      console.log(ev, cid);
       m = this.coll.getByCid(cid);
-      console.log(m);
       url = m.get("url");
       return window.open(url);
     };
@@ -350,7 +348,6 @@
           for (_i = 0, _len = items.length; _i < _len; _i++) {
             it = items[_i];
             d = it.data;
-            console.log(d);
             lv.addLink(d);
           }
           return lv.render();
