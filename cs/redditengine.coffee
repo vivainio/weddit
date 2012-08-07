@@ -53,8 +53,15 @@ class RTopicGroupView extends Backbone.View
         
         EventDispatcher.trigger "selectCategories", [m.get "topics"]
         
+    doSelectTopic: (ev) ->
+        topic = $(ev.target).text()
+        console.log "topic", topic
+        EventDispatcher.trigger "selectCategories", [[topic]]
+        
+
     events: 
-        "click .tg-name" : "doSelectGroup"        
+        "click .tg-name" : "doSelectGroup"
+        "click .tg-topic" : "doSelectTopic"
     
 
 class RLinkList extends Backbone.Collection
@@ -194,7 +201,8 @@ class RedditEngine
         #@mainview.addCategory("funny")
         #@mainview.render()
 
-        EventDispatcher.bind "selectCategories", (ev, cats) =>            
+        EventDispatcher.bind "selectCategories", (ev, cats) =>
+            console.log cats
             mv.setCategories (cats)
             mv.render()
             @fetchAll()

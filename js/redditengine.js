@@ -121,8 +121,16 @@
       return EventDispatcher.trigger("selectCategories", [m.get("topics")]);
     };
 
+    RTopicGroupView.prototype.doSelectTopic = function(ev) {
+      var topic;
+      topic = $(ev.target).text();
+      console.log("topic", topic);
+      return EventDispatcher.trigger("selectCategories", [[topic]]);
+    };
+
     RTopicGroupView.prototype.events = {
-      "click .tg-name": "doSelectGroup"
+      "click .tg-name": "doSelectGroup",
+      "click .tg-topic": "doSelectTopic"
     };
 
     return RTopicGroupView;
@@ -318,6 +326,7 @@
       this.tgview.render();
       this.mainview = mv = new RCatListView;
       return EventDispatcher.bind("selectCategories", function(ev, cats) {
+        console.log(cats);
         mv.setCategories(cats);
         mv.render();
         return _this.fetchAll();
