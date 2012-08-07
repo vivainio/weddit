@@ -241,6 +241,20 @@
       return RCatView.__super__.constructor.apply(this, arguments);
     }
 
+    RCatView.prototype.events = {
+      "click .linkcontainer": "doSelect"
+    };
+
+    RCatView.prototype.doSelect = function(ev) {
+      var cid, m, url;
+      cid = $(ev.currentTarget).data("cid");
+      console.log(ev, cid);
+      m = this.coll.getByCid(cid);
+      console.log(m);
+      url = m.get("url");
+      return window.open(url);
+    };
+
     RCatView.prototype.initialize = function() {
       var pat;
       this.coll = new RLinkList;

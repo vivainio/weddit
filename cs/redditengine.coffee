@@ -118,6 +118,20 @@ class RCatListView extends Backbone.View
     
 class RCatView extends Backbone.View
     
+    events:
+        "click .linkcontainer"  : "doSelect"
+        
+        
+        
+    doSelect: (ev) ->
+        
+        cid = $(ev.currentTarget).data("cid")
+        console.log ev, cid
+        m = @coll.getByCid cid
+        console.log m
+        url = m.get "url"
+        window.open url
+        
     initialize: ->
         @coll = new RLinkList
         _.bindAll @
