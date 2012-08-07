@@ -25,8 +25,9 @@
 </head>
 <body>
 
-<!-- Example row of columns -->
+<!-- scripts -->
 <script id="link-template" type="text/x-handlebars-template">
+
 <li class="linkcontainer" data-cid="{{cid}}">		  
   {{#if linkimg}}
   <img class="linkpic" height="60" width="60" src="{{linkimg}}"></img>
@@ -40,8 +41,8 @@
 <script id="catlist-template" type="text/x-handlebars-template">
 
   <div class="catlist-container">	    
-      <div class="catlist-heading ui-bar ui-bar-b">{{catname}}</div>
-      <div><br></div>
+      <h2 class="catlist-heading">{{catname}}</h2>
+    
       <div class="catlist-links" data-catname="{{catname}}"></div>
   </div>
 </script>
