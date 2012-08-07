@@ -145,6 +145,7 @@ class RCatView extends Backbone.View
             linkdesc: m.get "title"
             linkscore: m.get "score"
             linkimg: m.get "thumbnail"
+            linkcomments: m.get "num_comments"
             cid: m.cid
             
         expanded
@@ -219,6 +220,7 @@ class RedditEngine
                 #all = $("<div>")
                 for it in items
                     d = it.data
+                    console.log d
                     
                     lv.addLink d
                     #all.append(expanded)

@@ -1,11 +1,7 @@
-/*
-.linkdesc {
-    color: blue;
-    
-    font-weight: bold;
-    margin-left: 1em
+.linkdesc {  
+    white-space: normal;
 }
-*/
+
 .rtemplate {
     display: none;
 }
@@ -15,11 +11,12 @@
     float: left;
     border-style: none;
 }
-*/
 
 .linkpic.nopic {
     display: none
 }
+*/
+
 /*
 .linkcontainer {
     clear:left;

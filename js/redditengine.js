@@ -269,6 +269,7 @@
         linkdesc: m.get("title"),
         linkscore: m.get("score"),
         linkimg: m.get("thumbnail"),
+        linkcomments: m.get("num_comments"),
         cid: m.cid
       });
       return expanded;
@@ -349,6 +350,7 @@
           for (_i = 0, _len = items.length; _i < _len; _i++) {
             it = items[_i];
             d = it.data;
+            console.log(d);
             lv.addLink(d);
           }
           return lv.render();
