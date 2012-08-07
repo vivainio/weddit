@@ -1,31 +1,36 @@
+/*
 .linkdesc {
     color: blue;
     
     font-weight: bold;
     margin-left: 1em
 }
-
+*/
 .rtemplate {
     display: none;
 }
 
+/*
 .linkpic {
     float: left;
     border-style: none;
 }
+*/
 
 .linkpic.nopic {
     display: none
 }
-
+/*
 .linkcontainer {
     clear:left;
     min-height: 60px
 }
 
+
 .catlist-heading {
     clear: left;
 }
+*/
 
 .tg-topic, .tg-name {
     color: #3E6D8E;

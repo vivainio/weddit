@@ -21,54 +21,62 @@
 	<script src="lib/backbone.js"></script>
 	<script src="lib/handlebars-1.0.0.beta.6.js"></script>	
 	<script src="js/redditengine.js"></script>
+	<script src="lib/jquery.mobile-1.1.1/jquery.mobile-1.1.1.js"></script>
+	<link rel="stylesheet" href="lib/jquery.mobile-1.1.1/jquery.mobile-1.1.1.min.css" />	
 	
 </head>
 <body>
-    <div class="container">
 
-      <!-- Main hero unit for a primary marketing message or call to action -->
-      <!-- Example row of columns -->
-    <script id="link-template" type="text/x-handlebars-template">
-      <div class="linkcontainer" data-cid="{{cid}}">		  
-	<span class="linkdesc">{{ linkdesc }}</span>
-	<span class="linkscore"> {{ linkscore }}</span>
-	{{#if linkimg}}
-	<img class="linkpic" height="60" width="60" src="{{linkimg}}"></img>
-	{{/if}}
-      </div>		
-    </script>
-    <script id="catlist-template" type="text/x-handlebars-template">
-    
-	<div class="catlist-container">	    
-	    <h2 class="catlist-heading">{{catname}}</h2>
-	    <div class="catlist-links" data-catname="{{catname}}"></div>
-	</div>
-    </script>
+<!-- Example row of columns -->
+<script id="link-template" type="text/x-handlebars-template">
+<li class="linkcontainer" data-cid="{{cid}}">		  
+  {{#if linkimg}}
+  <img class="linkpic" height="60" width="60" src="{{linkimg}}"></img>
+  {{/if}}
 
-    <script id="topic-group-template" type="text/x-handlebars-template">    
-	<div class="topic-group" data-cid="{{tgid}}">
-	    <div class="tg-name" data-cid="{{tgid}}">{{tgname}}</div>
-	    <div class="tg-separator">::</div>
-	    {{#each topics}}
-	    <div class="tg-topic">{{this}}</div>
-	    {{/each}}
-	</div>
-    </script>
+  <p class="linkdesc">{{ linkdesc }}</p>
+  <span class="ui-li-count linkscore"> {{ linkscore }}</span>
+</li>		
+</script>
+<script id="catlist-template" type="text/x-handlebars-template">
 
-    
+  <div class="catlist-container">	    
+      <div class="catlist-heading ui-bar ui-bar-b">{{catname}}</div>
+      <div><br></div>
+      <div class="catlist-links" data-catname="{{catname}}"></div>
+  </div>
+</script>
+
+<script id="topic-group-template" type="text/x-handlebars-template">    
+  <div class="topic-group" data-cid="{{tgid}}">
+      <div class="tg-name" data-cid="{{tgid}}">{{tgname}}</div>
+      <div class="tg-separator">::</div>
+      {{#each topics}}
+      <div class="tg-topic">{{this}}</div>
+      {{/each}}
+  </div>
+</script>
+
+<div data-role="page">
+
+    <div data-role="header">
+	    <h1>Weddit</h1>
+    </div><!-- /header -->
+
+    <div data-role="content">
     <div id="topic-group-area">
 	
     </div>
     
     <div id="catlist-container">
      </div>
-     
-      <hr>
+    </div>
+    
 
-      <footer>
-        <p>&copy; Ville M. Vainio 2012</p>
-      </footer>
+</div>
 
-    </div> <!-- /container -->
+    
+
+    
 </body>
 </html>

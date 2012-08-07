@@ -277,12 +277,14 @@
     RCatView.prototype.render = function() {
       var all,
         _this = this;
-      all = $("<div>");
+      all = $('<ul data-role="listview" data-theme="g">');
       this.coll.each(function(m) {
         return all.append($(_this.renderOne(m)));
       });
       this.$el.empty();
-      return this.$el.append(all);
+      this.$el.append(all);
+      all.listview();
+      return all.listview("refresh");
     };
 
     RCatView.prototype.mkModel = function(d) {

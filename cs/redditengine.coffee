@@ -150,13 +150,15 @@ class RCatView extends Backbone.View
         expanded
     
     render: ->
-        all = $("<div>")
+        all = $('<ul data-role="listview" data-theme="g">')
         @coll.each (m) =>
             all.append $(@renderOne(m))
                 
         
         @$el.empty()
         @$el.append all
+        all.listview()
+        all.listview("refresh")
 
     mkModel: (d) ->
         m = new RLink
