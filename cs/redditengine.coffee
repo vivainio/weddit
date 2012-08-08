@@ -236,10 +236,13 @@ class VManageGroups extends Backbone.View
         _.bindAll @
         pat = $("#manage-groups-template").text()
         @tmplManageGroups = Handlebars.compile pat
+        console.log "init!",pat
 
-
-
-
+    render: ->
+        context = { groups: app.topicGroups.toJSON() }
+        h = @tmplManageGroups context
+        @$el.html h
+        
 class RedditEngine    
     initialize: ->        
         #@linktmpl = _.template pat

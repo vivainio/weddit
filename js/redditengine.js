@@ -378,7 +378,17 @@
       var pat;
       _.bindAll(this);
       pat = $("#manage-groups-template").text();
-      return this.tmplManageGroups = Handlebars.compile(pat);
+      this.tmplManageGroups = Handlebars.compile(pat);
+      return console.log("init!", pat);
+    };
+
+    VManageGroups.prototype.render = function() {
+      var context, h;
+      context = {
+        groups: app.topicGroups.toJSON()
+      };
+      h = this.tmplManageGroups(context);
+      return this.$el.html(h);
     };
 
     return VManageGroups;
