@@ -417,11 +417,10 @@
       m = this.modelByCid($(ev.currentTarget).data("cid"));
       app.vGroupEditor.model = m;
       app.vGroupEditor.render();
+      $("#pagegroupeditor").page();
       return _.defer(function() {
         $.mobile.changePage("#pagegroupeditor");
-        return _.defer(function() {
-          return app.vGroupEditor.updateList();
-        });
+        return app.vGroupEditor.updateList();
       });
     };
 
