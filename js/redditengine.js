@@ -254,18 +254,30 @@
       "click .rightedge": "doSelectComments"
     };
 
-    RCatView.prototype.doSelect = function(ev) {
-      var cid, m, url;
-      cid = $(ev.currentTarget).data("cid");
-      m = this.coll.getByCid(cid);
-      url = m.get("url");
+    RCatView.prototype.modelByCid = function(cid) {
+      return this.coll.getByCid(cid);
+    };
+
+    RCatView.prototype.openWindow = function(url) {
       return window.open(url);
     };
 
+    RCatView.prototype.doSelect = function(ev) {
+      var cid, m, url;
+      cid = $(ev.currentTarget).data("cid");
+      m = this.modelByCid(cid);
+      url = m.get("url");
+      return this.openWindow(url);
+    };
+
     RCatView.prototype.doSelectComments = function(ev) {
-      var trg;
-      trg = $(ev.currentTarget).parent();
-      console.log(["comments!", trg]);
+      var cid, fullurl, m, plink;
+      cid = $(ev.currentTarget).parent().data("cid");
+      m = this.modelByCid(cid);
+      plink = m.get("permalink");
+      console.log(["comments!", m, m.get("permalink")]);
+      fullurl = "http://reddit.com" + plink;
+      this.openWindow(fullurl);
       return ev.stopPropagation();
     };
 

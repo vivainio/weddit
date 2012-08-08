@@ -133,18 +133,32 @@ class RCatView extends Backbone.View
         
         
         
+    modelByCid: (cid) -> @coll.getByCid cid
+        
+        
+    openWindow: (url) ->
+        window.open url
+        
     doSelect: (ev) ->
         
         cid = $(ev.currentTarget).data("cid")
         #console.log ev, cid
-        m = @coll.getByCid cid
+        m = @modelByCid cid
         #console.log m
         url = m.get "url"
-        window.open url
+        @openWindow url
+        
     
     doSelectComments: (ev) ->
-        trg = $(ev.currentTarget).parent()
-        console.log ["comments!", trg ]
+        cid = $(ev.currentTarget).parent().data("cid")
+        
+        m = @modelByCid cid
+        plink = m.get "permalink"
+        console.log ["comments!", m, m.get "permalink" ]
+        
+        fullurl = "http://reddit.com" + plink
+        @openWindow fullurl
+        
         
         ev.stopPropagation()
         
