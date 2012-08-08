@@ -127,6 +127,9 @@ class RCatView extends Backbone.View
     
     events:
         "click .linkcontainer"  : "doSelect"
+        "click .rightedge" : "doSelectComments"
+        #"click .linkcomments" : "doSelectComments"
+        
         
         
         
@@ -138,6 +141,12 @@ class RCatView extends Backbone.View
         #console.log m
         url = m.get "url"
         window.open url
+    
+    doSelectComments: (ev) ->
+        trg = $(ev.currentTarget).parent()
+        console.log ["comments!", trg ]
+        
+        ev.stopPropagation()
         
     initialize: ->
         @coll = new RLinkList

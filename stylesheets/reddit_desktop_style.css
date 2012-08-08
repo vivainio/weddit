@@ -21,6 +21,15 @@
     display: none;
 }
 
+.rightedge {
+    position: absolute;
+    
+    width: 50px;
+    height: 100%;
+    right: 0px;
+    top: 0px;    
+}
+
 /*
 .linkpic {
     float: left;

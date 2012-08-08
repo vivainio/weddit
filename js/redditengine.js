@@ -250,7 +250,8 @@
     }
 
     RCatView.prototype.events = {
-      "click .linkcontainer": "doSelect"
+      "click .linkcontainer": "doSelect",
+      "click .rightedge": "doSelectComments"
     };
 
     RCatView.prototype.doSelect = function(ev) {
@@ -259,6 +260,13 @@
       m = this.coll.getByCid(cid);
       url = m.get("url");
       return window.open(url);
+    };
+
+    RCatView.prototype.doSelectComments = function(ev) {
+      var trg;
+      trg = $(ev.currentTarget).parent();
+      console.log(["comments!", trg]);
+      return ev.stopPropagation();
     };
 
     RCatView.prototype.initialize = function() {
