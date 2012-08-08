@@ -71,23 +71,56 @@
     </div>
 </div>
 
+
+<!-- http://jsfiddle.net/vivainio/K3vzP/ -->
+<script id="manage-groups-template" type="text/x-handlebars-template">
+    <ul data-role="listview" data-theme="g">
+    {{#each groups}}    
+    <li>
+        <a href="#pagegroupeditor">
+        <h1>{{groupName}}</h1>
+            {{#each topics}}
+            <span>{{this}}&nbsp;</span>
+            {{/each}}        
+        </a>
+        
+    </li>
+    {{/each}}
+
+    <li>
+        <a href="#pagegroupeditor">Add new group</a>
+    </li>
+    </ul>    
+</script>
+​
 <div data-role="page" id="pagegrouplist">
     <div data-role="header">
 	    <h1>Manage groups</h1>
     </div>
     
     <div data-role="content">
-	<ul data-role="listview" data-theme="g">
-	    <li>
-		<a href="#pagegroupeditor">Somestuff</a>		
-	    </li>
-	    <li>
-		<a href="#pagegroupeditor">Otherstuff</a>				
-	    </li>
-	    <li>
-		<a href="#pagegroupeditor">Add new group</a>
-	    </li>
-	</ul>
+	<div id="manage-groups-area">	
+	    <ul data-role="listview" data-theme="g">
+		<li>
+		    <a href="#pagegroupeditor">
+			<h1>Groupname</h1>
+			<p>a,b,c</p>
+		    </a>
+		    
+		</li>
+		<li>
+		    <a href="#pagegroupeditor">
+			<h1>Groupname</h1>
+			<p>a,b,c</p>
+		    </a>
+		    
+		</li>
+    
+		<li>
+		    <a href="#pagegroupeditor">Add new group</a>
+		</li>
+	    </ul>
+	</div>
     </div>
     
 </div>

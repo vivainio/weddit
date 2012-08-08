@@ -1,6 +1,39 @@
 root = window
 
+class App
+    start: ->
+        @topicGroups = new RTopicGroupList
+        
+        @shownCategories = new RCatList
+        
+        root.redditengine = reng = new RedditEngine()
+
+        @tgview = tg = new RTopicGroupView
+        tg.addTg "Funny stuff", ["pics", "fffffffuuuuuuuuuuuu"]
+        tg.addTg "Programming", ["javascript", "html5", "coffeescript"]
+        
+        @tgview.render()
+
+
+        @mainview = mv = new RCatListView
+
+        @vManageGroups = mg = new VManageGroups
+        mg.render()
+        
+        EventDispatcher.bind "selectCategories", (ev, cats) =>
+            console.log cats
+            mv.setCategories (cats)
+            mv.render()
+            reng.fetchAll()
+
+        reng.initialize()
+        reng.fetchAll()        
+
+
 EventDispatcher = $({})
+
+app = new App()
+
 
 logg = ->
 
@@ -27,11 +60,11 @@ class RTopicGroupView extends Backbone.View
     initialize: ->
         pat = $("#topic-group-template").html()
         @template = Handlebars.compile pat        
-        @tglist = new RTopicGroupList
+        @tglist = app.topicGroups
         
     render: ->
         @$el.empty()
-        
+        #console.log JSON.stringify @tglist.toJSON()
         @tglist.each (m) =>
             rend = @template
                 tgname: m.get "groupName"
@@ -80,15 +113,13 @@ class RCatListView extends Backbone.View
         pat = $("#catlist-template").html()
         @catlisttmpl = Handlebars.compile pat
         @singlecatviews = {}
-        
             
         
     render: ->
         @$el.empty()
         
         all = $('<div class="gen-cat-list-container">')
-        @categories_coll.each (m) =>            
-            
+        app.shownCategories.each (m) =>
             name = m.get "name"
             rendered = @catlisttmpl
                 catname: name
@@ -109,13 +140,13 @@ class RCatListView extends Backbone.View
         @$el.append(all)
         
     
-    setCategories: (cats)->        
-        @categories_coll.reset ({name} for name in cats)
+    setCategories: (cats)->
+        app.shownCategories.reset ({name} for name in cats)
     
     addCategory: (name) ->
         m = new RCat
         m.set "name": name
-        @categories_coll.add m
+        app.shownCategories.add m
     
     getView: (name) -> @singlecatviews[name]
         
@@ -129,9 +160,6 @@ class RCatView extends Backbone.View
         "click .linkcontainer"  : "doSelect"
         "click .rightedge" : "doSelectComments"
         #"click .linkcomments" : "doSelectComments"
-        
-        
-        
         
     modelByCid: (cid) -> @coll.getByCid cid
         
@@ -201,6 +229,16 @@ class RCatView extends Backbone.View
         m = @mkModel d
         @coll.add m
 
+class VManageGroups extends Backbone.View
+    el: "#manage-groups-area"
+    
+    initialize: ->
+        _.bindAll @
+        pat = $("#manage-groups-template").text()
+        @tmplManageGroups = Handlebars.compile pat
+
+
+
 
 class RedditEngine    
     initialize: ->        
@@ -211,29 +249,19 @@ class RedditEngine
         #@mkView "pics"
         #@mkView "funny"
         
-        @tgview = tg = new RTopicGroupView
-        tg.addTg "Funny stuff", ["pics", "fffffffuuuuuuuuuuuu"]
-        tg.addTg "Programming", ["javascript", "html5", "coffeescript"]
-        
-        @tgview.render()
         
         
-        @mainview = mv = new RCatListView
+        
         #mv.setCategories ["pics", "javascript"]
         #@mainview.addCategory("pics")
         #@mainview.addCategory("funny")
         #@mainview.render()
 
-        EventDispatcher.bind "selectCategories", (ev, cats) =>
-            console.log cats
-            mv.setCategories (cats)
-            mv.render()
-            @fetchAll()
         
         
     fetchAll: ->
         
-        @mainview.categories().each (m) => @fetchLinks m.get "name",""
+        app.shownCategories.each (m) => @fetchLinks m.get "name",""
             
     fetchLinks: (cat, qargs) ->        
         selector = ""
@@ -241,7 +269,7 @@ class RedditEngine
         url = "http://www.reddit.com/r/#{cat}/#{selector}.json?#{qargs} "
 
         
-        lv = @mainview.getView(cat)
+        lv = app.mainview.getView(cat)
         $.ajax
             url: url
             jsonp: "jsonp"
@@ -272,6 +300,5 @@ reng = null
     
 $ ->
     logg "starting up"
-    root.redditengine = reng = new RedditEngine()
-    reng.initialize()
-    reng.fetchAll()        
+    app.start()
+    
