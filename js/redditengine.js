@@ -276,7 +276,7 @@
       m = this.modelByCid(cid);
       plink = m.get("permalink");
       console.log(["comments!", m, m.get("permalink")]);
-      fullurl = "http://reddit.com" + plink;
+      fullurl = "http://reddit.com" + plink + ".compact";
       this.openWindow(fullurl);
       return ev.stopPropagation();
     };

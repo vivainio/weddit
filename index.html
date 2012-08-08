@@ -58,22 +58,31 @@
   </div>
 </script>
 
-<div data-role="page">
+<div data-role="page" id="pagemain">
 
     <div data-role="header">
 	    <h1>Weddit</h1>
     </div><!-- /header -->
 
     <div data-role="content">
-    <div id="topic-group-area">
-	
+	<div id="topic-group-area"></div>
+	<a id="btn-edit-groups" data-role="button" href="#pagegrouplist" data-inline="true">+</a>
+	<div id="catlist-container"></div>    
     </div>
-    
-    <div id="catlist-container">
-     </div>
-    </div>
-    
+</div>
 
+<div data-role="page" id="pagegrouplist">
+    <div data-role="header">
+	    <h1>Manage groups</h1>
+    </div>
+    
+    <div data-role="content">
+
+    <ul></ul>
+   
+    </div>
+    
+    
 </div>
 
     

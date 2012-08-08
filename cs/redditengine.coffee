@@ -156,7 +156,7 @@ class RCatView extends Backbone.View
         plink = m.get "permalink"
         console.log ["comments!", m, m.get "permalink" ]
         
-        fullurl = "http://reddit.com" + plink
+        fullurl = "http://reddit.com" + plink+".compact"
         @openWindow fullurl
         
         
