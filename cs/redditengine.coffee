@@ -19,6 +19,8 @@ class App
 
         @vManageGroups = mg = new VManageGroups
         mg.render()
+
+        @vGroupEditor = ge = new VGroupEditor
         
         EventDispatcher.bind "selectCategories", (ev, cats) =>
             console.log cats
@@ -36,7 +38,15 @@ app = new App()
 
 
 logg = ->
+    1
 
+collectionToJson = (coll)->    
+    coll.map (m) ->
+        o = m.toJSON()
+        o.cid = m.cid
+        o
+    
+    
 class RLink extends Backbone.Model
     defaults:
         linkdesc: "no description"
@@ -232,16 +242,64 @@ class RCatView extends Backbone.View
 class VManageGroups extends Backbone.View
     el: "#manage-groups-area"
     
+    events:
+        "click .topic-group-item" : "doSelectGroup"
+        
     initialize: ->
         _.bindAll @
         pat = $("#manage-groups-template").text()
         @tmplManageGroups = Handlebars.compile pat
-        console.log "init!",pat
+        #console.log "init!",pat
+        
 
     render: ->
-        context = { groups: app.topicGroups.toJSON() }
+        
+        context = { groups: collectionToJson app.topicGroups }
+        console.log context
         h = @tmplManageGroups context
         @$el.html h
+        
+    modelByCid: (cid) -> app.topicGroups.getByCid cid
+        
+    doSelectGroup: (ev) ->        
+        m = @modelByCid $(ev.currentTarget).data("cid")
+        
+        app.vGroupEditor.model = m
+        app.vGroupEditor.render()
+        _.defer =>        
+            $.mobile.changePage "#pagegroupeditor"
+            _.defer =>
+                app.vGroupEditor.updateList()
+                
+        
+        
+        
+        
+        
+class VGroupEditor extends Backbone.View
+    el: "#group-editor-area"
+    
+    initialize: ->
+        _.bindAll @
+        pat = $("#group-editor-template").text()
+        @tmpl = Handlebars.compile pat
+        
+        #$("#pagegroupeditor").on "pagebeforecreate", =>
+        #    @render()
+        
+    updateList: ->
+        ul = @.$(".rootlist")        
+        ul.listview()
+        
+    render: ->
+        console.log "render"
+        if not @model
+            return
+            
+        context = @model.toJSON()
+        h = @tmpl context
+        @$el.html h
+        
         
 class RedditEngine    
     initialize: ->        

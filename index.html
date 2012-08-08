@@ -76,15 +76,15 @@
 <script id="manage-groups-template" type="text/x-handlebars-template">
     <ul data-role="listview" data-theme="g">
     {{#each groups}}    
-    <li>
-        <a href="#pagegroupeditor">
-        <h1>{{groupName}}</h1>
-            {{#each topics}}
-            <span>{{this}}&nbsp;</span>
-            {{/each}}        
-        </a>
-        
-    </li>
+	<li class="topic-group-item" data-cid="{{cid}}">
+	    <a href="#">
+	    <h1>{{groupName}}</h1>
+		{{#each topics}}
+		<span>{{this}}&nbsp;</span>
+		{{/each}}        
+	    </a>
+	    
+	</li>
     {{/each}}
 
     <li>
@@ -125,19 +125,20 @@
     
 </div>
 
-<div data-role="page" id="pagegroupeditor">
-    <div data-role="content">
+<script id="group-editor-template" type="text/x-handlebars-template">
+    <div class="group-editor">
 	<h3>Group name:</h3>
-
+    
 	<div data-role="fieldcontain">
-	    <input type="text" id="inpgroupname" value="noval"></input>	    
+	    <input type="text" id="inpgroupname" value="{{groupName}}"></input>	    
 	    <button data-inline="true">Apply</button>
 	</div>
 	
 	<p>Subreddits</p>
-	<ul data-role="listview">
-	    <li>One</li>
-	    <li>Two</li>
+	<ul class="rootlist" data-role="listview">
+	    {{#each topics}}
+	    <li>{{this}}</li>
+	    {{/each}}
 	    <li>
 		<div data-role="fieldcontain">
 		    <input type="text" id="inpnewcategory"></input>
@@ -145,6 +146,32 @@
 		</div>
 	    </li>
 	</ul>
+    </div>
+</script>
+
+<div data-role="page" id="pagegroupeditor">
+    <div data-role="content">
+	
+	<div id="group-editor-area">
+	    <h3>Group name:</h3>
+    
+	    <div data-role="fieldcontain">
+		<input type="text" id="inpgroupname" value="noval"></input>	    
+		<button data-inline="true">Apply</button>
+	    </div>
+	    
+	    <p>Subreddits</p>
+	    <ul data-role="listview">
+		<li>One</li>
+		<li>Two</li>
+		<li>
+		    <div data-role="fieldcontain">
+			<input type="text" id="inpnewcategory"></input>
+			<button data-inline="true">Add</button>
+		    </div>
+		</li>
+	    </ul>
+	</div>
     </div>
 </div>
 
