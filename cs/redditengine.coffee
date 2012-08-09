@@ -2,6 +2,10 @@ root = window
 
 class App
     start: ->
+
+
+        $("div[data-role=page]").page()
+
         @topicGroups = new RTopicGroupList
         
         @topicGroups.fetch()
@@ -268,6 +272,7 @@ class VManageGroups extends Backbone.View
         @tmplManageGroups = Handlebars.compile pat
         app.topicGroups.bind "change remove", =>
             @render()
+            @.$(".rootlist").listview()
             
     
         
@@ -279,7 +284,7 @@ class VManageGroups extends Backbone.View
         console.log context
         h = @tmplManageGroups context
         @$el.html h
-        @.$(".rootlist").listview("refresh")
+        
         
     modelByCid: (cid) -> app.topicGroups.getByCid cid
         
@@ -292,7 +297,7 @@ class VManageGroups extends Backbone.View
         app.vGroupEditor.model = m
         app.vGroupEditor.render()
 
-        $("#pagegroupeditor").page()
+        
         _.defer =>        
             $.mobile.changePage "#pagegroupeditor"
             app.vGroupEditor.updateList()

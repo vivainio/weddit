@@ -14,6 +14,7 @@
     App.prototype.start = function() {
       var ge, mg, mv, reng, tg,
         _this = this;
+      $("div[data-role=page]").page();
       this.topicGroups = new RTopicGroupList;
       this.topicGroups.fetch();
       this.shownCategories = new RCatList;
@@ -414,7 +415,8 @@
       pat = $("#manage-groups-template").text();
       this.tmplManageGroups = Handlebars.compile(pat);
       return app.topicGroups.bind("change remove", function() {
-        return _this.render();
+        _this.render();
+        return _this.$(".rootlist").listview();
       });
     };
 
@@ -425,8 +427,7 @@
       };
       console.log(context);
       h = this.tmplManageGroups(context);
-      this.$el.html(h);
-      return this.$(".rootlist").listview("refresh");
+      return this.$el.html(h);
     };
 
     VManageGroups.prototype.modelByCid = function(cid) {
@@ -443,7 +444,6 @@
       var _this = this;
       app.vGroupEditor.model = m;
       app.vGroupEditor.render();
-      $("#pagegroupeditor").page();
       return _.defer(function() {
         $.mobile.changePage("#pagegroupeditor");
         return app.vGroupEditor.updateList();
