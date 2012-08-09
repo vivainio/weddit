@@ -269,12 +269,7 @@ class VManageGroups extends Backbone.View
         $("#pagegroupeditor").page()
         _.defer =>        
             $.mobile.changePage "#pagegroupeditor"
-            app.vGroupEditor.updateList()
-            #_.defer =>
-            #    app.vGroupEditor.updateList()
-                
-        
-        
+            app.vGroupEditor.updateList()        
         
         
         
