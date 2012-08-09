@@ -2,7 +2,8 @@
 (function() {
   var App, EventDispatcher, RCat, RCatList, RCatListView, RCatView, RLink, RLinkList, RTopicGroup, RTopicGroupList, RTopicGroupView, RedditEngine, VGroupEditor, VManageGroups, app, collectionToJson, logg, reng, root,
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    __slice = [].slice;
 
   root = window;
 
@@ -130,10 +131,17 @@
     RTopicGroupView.prototype.el = "#topic-group-area";
 
     RTopicGroupView.prototype.initialize = function() {
-      var pat;
+      var pat,
+        _this = this;
       pat = $("#topic-group-template").html();
       this.template = Handlebars.compile(pat);
-      return this.tglist = app.topicGroups;
+      this.tglist = app.topicGroups;
+      return this.tglist.bind("change", function() {
+        var args;
+        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        console.log("Changed!", args);
+        return _this.render();
+      });
     };
 
     RTopicGroupView.prototype.render = function() {
@@ -395,14 +403,19 @@
     VManageGroups.prototype.el = "#manage-groups-area";
 
     VManageGroups.prototype.events = {
-      "click .topic-group-item": "doSelectGroup"
+      "click .topic-group-item": "doSelectGroup",
+      "click #btnNewGroup": "doNewGroup"
     };
 
     VManageGroups.prototype.initialize = function() {
-      var pat;
+      var pat,
+        _this = this;
       _.bindAll(this);
       pat = $("#manage-groups-template").text();
-      return this.tmplManageGroups = Handlebars.compile(pat);
+      this.tmplManageGroups = Handlebars.compile(pat);
+      return app.topicGroups.bind("change remove", function() {
+        return _this.render();
+      });
     };
 
     VManageGroups.prototype.render = function() {
@@ -412,7 +425,8 @@
       };
       console.log(context);
       h = this.tmplManageGroups(context);
-      return this.$el.html(h);
+      this.$el.html(h);
+      return this.$(".rootlist").listview("refresh");
     };
 
     VManageGroups.prototype.modelByCid = function(cid) {
@@ -420,9 +434,13 @@
     };
 
     VManageGroups.prototype.doSelectGroup = function(ev) {
-      var m,
-        _this = this;
+      var m;
       m = this.modelByCid($(ev.currentTarget).data("cid"));
+      return this.switchToGroupEditor(m);
+    };
+
+    VManageGroups.prototype.switchToGroupEditor = function(m) {
+      var _this = this;
       app.vGroupEditor.model = m;
       app.vGroupEditor.render();
       $("#pagegroupeditor").page();
@@ -430,6 +448,17 @@
         $.mobile.changePage("#pagegroupeditor");
         return app.vGroupEditor.updateList();
       });
+    };
+
+    VManageGroups.prototype.doNewGroup = function(ev) {
+      var m;
+      console.log("Add new group");
+      m = app.topicGroups.create({
+        groupName: "<untitled>",
+        topics: []
+      });
+      this.switchToGroupEditor(m);
+      return app.vGroupEditor.model = m;
     };
 
     return VManageGroups;
@@ -453,10 +482,16 @@
     };
 
     VGroupEditor.prototype.initialize = function() {
-      var pat;
+      var pat,
+        _this = this;
       _.bindAll(this);
       pat = $("#group-editor-template").text();
-      return this.tmpl = Handlebars.compile(pat);
+      this.tmpl = Handlebars.compile(pat);
+      return $("#btnDeleteGroup").on("click", function() {
+        console.log("Delete group!");
+        _this.model.destroy();
+        return history.back();
+      });
     };
 
     VGroupEditor.prototype.updateList = function() {

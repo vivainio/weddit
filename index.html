@@ -75,7 +75,7 @@
 
 <!-- http://jsfiddle.net/vivainio/K3vzP/ -->
 <script id="manage-groups-template" type="text/x-handlebars-template">
-    <ul data-role="listview" data-theme="g">
+    <ul class="rootlist" data-role="listview" data-theme="g">
     {{#each groups}}    
 	<li class="topic-group-item" data-cid="{{cid}}">
 	    <a href="#">
@@ -140,7 +140,7 @@
 	    {{#each topics}}
 	    <li data-icon="delete"><a class="aRemoveCat" href="#">{{this}}</a></li>
 	    {{/each}}
-	    <li>
+	    <li data-icon="plus">
 		<div data-role="fieldcontain">
 		    <input type="text" id="inpNewCategory"></input>
 		    <button id="btnAdd" data-inline="true">Add</button>
@@ -151,8 +151,10 @@
 </script>
 
 <div data-role="page" id="pagegroupeditor" data-add-back-btn="true">
-    <div data-role="header"> 
-	    <h1>Edit group</h1> 
+    <div data-role="header">
+	    <a href="#" data-icon="back" data-rel="back">Back</a>
+	    <h1>Edit group</h1>
+	    <a href="#" id="btnDeleteGroup" data-icon="delete">Delete group</a>
     </div> 
 
     <div data-role="content">

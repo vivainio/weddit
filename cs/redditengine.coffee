@@ -74,6 +74,9 @@ class RTopicGroupView extends Backbone.View
         pat = $("#topic-group-template").html()
         @template = Handlebars.compile pat        
         @tglist = app.topicGroups
+        @tglist.bind "change", (args...) =>
+            console.log "Changed!",args
+            @render()
         
     render: ->
         @$el.empty()
@@ -257,33 +260,51 @@ class VManageGroups extends Backbone.View
     
     events:
         "click .topic-group-item" : "doSelectGroup"
+        "click #btnNewGroup" : "doNewGroup"
         
     initialize: ->
         _.bindAll @
         pat = $("#manage-groups-template").text()
         @tmplManageGroups = Handlebars.compile pat
+        app.topicGroups.bind "change remove", =>
+            @render()
+            
+    
+        
         #console.log "init!",pat
         
 
-    render: ->
-        
+    render: ->        
         context = { groups: collectionToJson app.topicGroups }
         console.log context
         h = @tmplManageGroups context
         @$el.html h
+        @.$(".rootlist").listview("refresh")
         
     modelByCid: (cid) -> app.topicGroups.getByCid cid
         
     doSelectGroup: (ev) ->        
         m = @modelByCid $(ev.currentTarget).data("cid")
-        
+
+        @switchToGroupEditor m         
+    
+    switchToGroupEditor: (m) ->
         app.vGroupEditor.model = m
         app.vGroupEditor.render()
+
         $("#pagegroupeditor").page()
         _.defer =>        
             $.mobile.changePage "#pagegroupeditor"
-            app.vGroupEditor.updateList()        
+            app.vGroupEditor.updateList()
         
+        
+    doNewGroup: (ev) ->
+        console.log "Add new group"
+        m = app.topicGroups.create groupName: "<untitled>", topics: []
+        #app.tgview.render()
+        #app.vManageGroups.render()
+        @switchToGroupEditor m
+        app.vGroupEditor.model = m
         
         
 class VGroupEditor extends Backbone.View
@@ -298,6 +319,14 @@ class VGroupEditor extends Backbone.View
         _.bindAll @
         pat = $("#group-editor-template").text()
         @tmpl = Handlebars.compile pat
+    
+        $("#btnDeleteGroup").on "click", =>
+            console.log "Delete group!"
+            #app.topicGroups.remove @model
+            @model.destroy()
+            history.back()
+            
+    
         
         #$("#pagegroupeditor").on "pagebeforecreate", =>
         #    @render()
