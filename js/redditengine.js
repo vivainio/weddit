@@ -158,16 +158,25 @@
       });
     };
 
+    RTopicGroupView.prototype.makeCurrent = function(elem) {
+      $(".tg-current-choice").removeClass("tg-current-choice");
+      return elem.addClass("tg-current-choice");
+    };
+
     RTopicGroupView.prototype.doSelectGroup = function(ev) {
-      var cid, m;
-      cid = $(ev.target).data("cid");
+      var cid, m, trg;
+      trg = $(ev.target);
+      cid = trg.data("cid");
+      this.makeCurrent(trg);
       m = this.tglist.getByCid(cid);
       return EventDispatcher.trigger("selectCategories", [m.get("topics")]);
     };
 
     RTopicGroupView.prototype.doSelectTopic = function(ev) {
-      var topic;
-      topic = $(ev.target).text();
+      var topic, trg;
+      trg = $(ev.target);
+      this.makeCurrent(trg);
+      topic = trg.text();
       console.log("topic", topic);
       return EventDispatcher.trigger("selectCategories", [[topic]]);
     };

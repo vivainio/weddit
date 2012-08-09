@@ -93,16 +93,25 @@ class RTopicGroupView extends Backbone.View
         #m = new Backbone.Model 
         #@tglist.add m
 
+    makeCurrent: (elem) ->
+        $(".tg-current-choice").removeClass "tg-current-choice"
+        elem.addClass "tg-current-choice"
+        
     doSelectGroup: (ev) ->
         
-        cid = $(ev.target).data("cid")
+        trg = $(ev.target)
+        cid = trg.data("cid")
+        @makeCurrent trg
         m = @tglist.getByCid cid
         
         
         EventDispatcher.trigger "selectCategories", [m.get "topics"]
         
+    
     doSelectTopic: (ev) ->
-        topic = $(ev.target).text()
+        trg = $(ev.target)
+        @makeCurrent trg
+        topic = trg.text()
         console.log "topic", topic
         EventDispatcher.trigger "selectCategories", [[topic]]
         

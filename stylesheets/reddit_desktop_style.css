@@ -64,11 +64,15 @@
     font-size: 90%;
     line-height: 2.4;
     white-space: nowrap;
-    display: inline
+    display: inline;
 }
 
 .tg-separator {
-    display: inline
+    display: inline;
     
+}
+
+.tg-current-choice {
+    color: yellow;
 }
 
