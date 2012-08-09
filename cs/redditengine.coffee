@@ -10,6 +10,20 @@ class App
         
         @topicGroups.fetch()
         
+        if not @topicGroups.length
+            _.defer =>
+                
+                #d = $("#pagesetupwizard").dialog({autoOpen: true})
+                $.mobile.changePage "#pagesetupwizard"
+                
+                #alert ("No groups!")
+                  
+        $("#btnWizardCreate").on "click", =>            
+            console.log "wizard mode!"
+            @tgview.addTg "Humor",["pics", "fffffffuuuuuuuuuuuu", "funny"]
+            @tgview.addTg "Code",["programming", "html5", "javascript", "webdev"]
+            
+        
         @shownCategories = new RCatList
         
         root.redditengine = reng = new RedditEngine()
@@ -172,11 +186,6 @@ class RCatListView extends Backbone.View
     
     setCategories: (cats)->
         app.shownCategories.reset ({name} for name in cats)
-    
-    addCategory: (name) ->
-        m = new RCat
-        m.set "name": name
-        app.shownCategories.add m
     
     getView: (name) -> @singlecatviews[name]
         
@@ -421,10 +430,15 @@ class RedditEngine
         
         app.shownCategories.each (m) => @fetchLinks m.get "name",""
             
-    fetchLinks: (cat, qargs) ->        
-        selector = ""
-        qargs = qargs = "jsonp=?&"
-        url = "http://www.reddit.com/r/#{cat}/#{selector}.json?#{qargs} "
+    fetchLinks: (cat, qargs) ->                
+        qargs = "jsonp=?&"
+                
+        if cat == "frontpage"
+            catfrag = ""
+        else
+            catfrag = "/r/#{cat}/"
+            
+        url = "http://www.reddit.com#{catfrag}/.json?#{qargs} "
 
         
         lv = app.mainview.getView(cat)
@@ -445,12 +459,6 @@ class RedditEngine
                 #console.log items
                 lv.render()
                 
-        """        
-        $.getJSON url, (resp) =>
-            items = resp.data.children
-            for it in items
-                console.log it
-        """       
 
 root.RedditEngine = RedditEngine    
     

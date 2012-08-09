@@ -17,6 +17,16 @@
       $("div[data-role=page]").page();
       this.topicGroups = new RTopicGroupList;
       this.topicGroups.fetch();
+      if (!this.topicGroups.length) {
+        _.defer(function() {
+          return $.mobile.changePage("#pagesetupwizard");
+        });
+      }
+      $("#btnWizardCreate").on("click", function() {
+        console.log("wizard mode!");
+        _this.tgview.addTg("Humor", ["pics", "fffffffuuuuuuuuuuuu", "funny"]);
+        return _this.tgview.addTg("Code", ["programming", "html5", "javascript", "webdev"]);
+      });
       this.shownCategories = new RCatList;
       root.redditengine = reng = new RedditEngine();
       this.tgview = tg = new RTopicGroupView;
@@ -280,15 +290,6 @@
         }
         return _results;
       })());
-    };
-
-    RCatListView.prototype.addCategory = function(name) {
-      var m;
-      m = new RCat;
-      m.set({
-        "name": name
-      });
-      return app.shownCategories.add(m);
     };
 
     RCatListView.prototype.getView = function(name) {
@@ -576,13 +577,17 @@
     };
 
     RedditEngine.prototype.fetchLinks = function(cat, qargs) {
-      var lv, selector, url,
+      var catfrag, lv, url,
         _this = this;
-      selector = "";
-      qargs = qargs = "jsonp=?&";
-      url = "http://www.reddit.com/r/" + cat + "/" + selector + ".json?" + qargs + " ";
+      qargs = "jsonp=?&";
+      if (cat === "frontpage") {
+        catfrag = "";
+      } else {
+        catfrag = "/r/" + cat + "/";
+      }
+      url = "http://www.reddit.com" + catfrag + "/.json?" + qargs + " ";
       lv = app.mainview.getView(cat);
-      $.ajax({
+      return $.ajax({
         url: url,
         jsonp: "jsonp",
         dataType: "jsonp",
@@ -597,7 +602,6 @@
           return lv.render();
         }
       });
-      return "        \n$.getJSON url, (resp) =>\n    items = resp.data.children\n    for it in items\n        console.log it";
     };
 
     return RedditEngine;
