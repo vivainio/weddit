@@ -4,16 +4,18 @@ class App
     start: ->
         @topicGroups = new RTopicGroupList
         
+        @topicGroups.fetch()
+        
         @shownCategories = new RCatList
         
         root.redditengine = reng = new RedditEngine()
 
         @tgview = tg = new RTopicGroupView
-        tg.addTg "Funny stuff", ["pics", "fffffffuuuuuuuuuuuu"]
-        tg.addTg "Programming", ["javascript", "html5", "coffeescript"]
+        #tg.addTg "Funny stuff", ["pics", "fffffffuuuuuuuuuuuu"]
+        #tg.addTg "Programming", ["javascript", "html5", "coffeescript"]
         
+        #@topicGroups.sync()
         @tgview.render()
-
 
         @mainview = mv = new RCatListView
 
@@ -62,6 +64,7 @@ class RTopicGroup extends Backbone.Model
         topics: ["pics", "funny"]
 
 class RTopicGroupList extends Backbone.Collection
+    localStorage: new Store("topicgroups")
     model: RTopicGroup
     
 class RTopicGroupView extends Backbone.View
@@ -85,8 +88,10 @@ class RTopicGroupView extends Backbone.View
             @$el.append rend
             
     addTg: (name, topics) ->
-        m = new Backbone.Model groupName: name, topics: topics
-        @tglist.add m
+        
+        @tglist.create groupName: name, topics: topics
+        #m = new Backbone.Model 
+        #@tglist.add m
 
     doSelectGroup: (ev) ->
         
@@ -276,6 +281,9 @@ class VManageGroups extends Backbone.View
 class VGroupEditor extends Backbone.View
     el: "#group-editor-area"
     
+    events:
+        "click #btnAdd": "doAddCat"
+        
     initialize: ->
         _.bindAll @
         pat = $("#group-editor-template").text()
@@ -296,6 +304,19 @@ class VGroupEditor extends Backbone.View
         context = @model.toJSON()
         h = @tmpl context
         @$el.html h
+        
+    doAddCat: (ev) ->
+        
+        t = $("#inpNewCategory").val()
+        console.log "add cat",t
+        if t.length < 1
+            return
+        m = @model
+        topics = m.get "topics"        
+        console.log "add to",topics
+        topics.push t
+        m.set "topics", topics
+        m.save()
         
         
 class RedditEngine    

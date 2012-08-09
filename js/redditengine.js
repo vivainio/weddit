@@ -14,11 +14,10 @@
       var ge, mg, mv, reng, tg,
         _this = this;
       this.topicGroups = new RTopicGroupList;
+      this.topicGroups.fetch();
       this.shownCategories = new RCatList;
       root.redditengine = reng = new RedditEngine();
       this.tgview = tg = new RTopicGroupView;
-      tg.addTg("Funny stuff", ["pics", "fffffffuuuuuuuuuuuu"]);
-      tg.addTg("Programming", ["javascript", "html5", "coffeescript"]);
       this.tgview.render();
       this.mainview = mv = new RCatListView;
       this.vManageGroups = mg = new VManageGroups;
@@ -112,6 +111,8 @@
       return RTopicGroupList.__super__.constructor.apply(this, arguments);
     }
 
+    RTopicGroupList.prototype.localStorage = new Store("topicgroups");
+
     RTopicGroupList.prototype.model = RTopicGroup;
 
     return RTopicGroupList;
@@ -151,12 +152,10 @@
     };
 
     RTopicGroupView.prototype.addTg = function(name, topics) {
-      var m;
-      m = new Backbone.Model({
+      return this.tglist.create({
         groupName: name,
         topics: topics
       });
-      return this.tglist.add(m);
     };
 
     RTopicGroupView.prototype.doSelectGroup = function(ev) {
@@ -438,6 +437,10 @@
 
     VGroupEditor.prototype.el = "#group-editor-area";
 
+    VGroupEditor.prototype.events = {
+      "click #btnAdd": "doAddCat"
+    };
+
     VGroupEditor.prototype.initialize = function() {
       var pat;
       _.bindAll(this);
@@ -460,6 +463,21 @@
       context = this.model.toJSON();
       h = this.tmpl(context);
       return this.$el.html(h);
+    };
+
+    VGroupEditor.prototype.doAddCat = function(ev) {
+      var m, t, topics;
+      t = $("#inpNewCategory").val();
+      console.log("add cat", t);
+      if (t.length < 1) {
+        return;
+      }
+      m = this.model;
+      topics = m.get("topics");
+      console.log("add to", topics);
+      topics.push(t);
+      m.set("topics", topics);
+      return m.save();
     };
 
     return VGroupEditor;
