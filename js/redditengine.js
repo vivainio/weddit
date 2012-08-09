@@ -439,7 +439,8 @@
 
     VGroupEditor.prototype.events = {
       "click #btnAdd": "doAddCat",
-      "click .aRemoveCat": "doRemoveCat"
+      "click .aRemoveCat": "doRemoveCat",
+      "click #btnApplyChangeGroupName": "doChangeGroupName"
     };
 
     VGroupEditor.prototype.initialize = function() {
@@ -495,6 +496,14 @@
       m.save();
       this.render();
       return this.updateList();
+    };
+
+    VGroupEditor.prototype.doChangeGroupName = function(ev) {
+      var t;
+      t = $("#inpGroupName").val();
+      console.log("Change to", t);
+      this.model.set("groupName", t);
+      return this.model.save();
     };
 
     return VGroupEditor;

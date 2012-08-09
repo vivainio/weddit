@@ -284,6 +284,7 @@ class VGroupEditor extends Backbone.View
     events:
         "click #btnAdd": "doAddCat"
         "click .aRemoveCat": "doRemoveCat"
+        "click #btnApplyChangeGroupName" : "doChangeGroupName"
         
     initialize: ->
         _.bindAll @
@@ -333,7 +334,11 @@ class VGroupEditor extends Backbone.View
         @render()
         @updateList()
         
-        
+    doChangeGroupName: (ev) ->
+        t = $("#inpGroupName").val()
+        console.log "Change to",t
+        @model.set "groupName", t
+        @model.save()
         
         
         
