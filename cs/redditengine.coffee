@@ -78,7 +78,7 @@ class RTopicGroupView extends Backbone.View
         pat = $("#topic-group-template").html()
         @template = Handlebars.compile pat        
         @tglist = app.topicGroups
-        @tglist.bind "change", (args...) =>
+        @tglist.bind "change remove", (args...) =>
             console.log "Changed!",args
             @render()
         
@@ -272,7 +272,7 @@ class VManageGroups extends Backbone.View
         @tmplManageGroups = Handlebars.compile pat
         app.topicGroups.bind "change remove", =>
             @render()
-            @.$(".rootlist").listview()
+            
             
     
         
@@ -284,6 +284,7 @@ class VManageGroups extends Backbone.View
         console.log context
         h = @tmplManageGroups context
         @$el.html h
+        @.$(".rootlist").listview()
         
         
     modelByCid: (cid) -> app.topicGroups.getByCid cid
@@ -294,13 +295,14 @@ class VManageGroups extends Backbone.View
         @switchToGroupEditor m         
     
     switchToGroupEditor: (m) ->
-        app.vGroupEditor.model = m
-        app.vGroupEditor.render()
+        app.vGroupEditor.setModel m
+        #app.vGroupEditor.render()
 
+        $.mobile.changePage "#pagegroupeditor"
         
-        _.defer =>        
-            $.mobile.changePage "#pagegroupeditor"
-            app.vGroupEditor.updateList()
+        #_.defer =>        
+        #    $.mobile.changePage "#pagegroupeditor"
+        #    app.vGroupEditor.updateList()
         
         
     doNewGroup: (ev) ->
@@ -309,7 +311,7 @@ class VManageGroups extends Backbone.View
         #app.tgview.render()
         #app.vManageGroups.render()
         @switchToGroupEditor m
-        app.vGroupEditor.model = m
+        app.vGroupEditor.setModel m
         
         
 class VGroupEditor extends Backbone.View
@@ -339,6 +341,7 @@ class VGroupEditor extends Backbone.View
     updateList: ->
         ul = @.$(".rootlist")        
         ul.listview()
+        ul.listview("refresh")
         
     render: ->
         console.log "render"
@@ -348,6 +351,16 @@ class VGroupEditor extends Backbone.View
         context = @model.toJSON()
         h = @tmpl context
         @$el.html h
+        @updateList()
+        
+    setModel: (m)->
+        @model = m
+        @render()
+        m.on "all", (args...) =>
+            console.log "m change",args
+        m.on "change", =>
+            @render()
+        
         
     doAddCat: (ev) ->
         
@@ -356,13 +369,13 @@ class VGroupEditor extends Backbone.View
         if t.length < 1
             return
         m = @model
-        topics = m.get "topics"        
-        console.log "add to",topics
-        topics.push t
-        m.set "topics", topics
+        topics = m.get "topics"                
+        #topics.push t
+        m.set "topics", topics.concat [t]         
         m.save()
-        @render()
-        @updateList()
+        
+        #@render()
+        #@updateList()
         
     doRemoveCat: (ev) ->
         elem =  $(ev.currentTarget)
@@ -371,10 +384,11 @@ class VGroupEditor extends Backbone.View
         ul = @.$(".rootlist")
         m = @model
         topics = _.without m.get("topics"), toRemove
-        m.set "topics", topics
+        m.set "topics", topics        
         m.save()
-        @render()
-        @updateList()
+        
+        #@render()
+        #@updateList()
         
     doChangeGroupName: (ev) ->
         t = $("#inpGroupName").val()

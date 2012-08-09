@@ -137,7 +137,7 @@
       pat = $("#topic-group-template").html();
       this.template = Handlebars.compile(pat);
       this.tglist = app.topicGroups;
-      return this.tglist.bind("change", function() {
+      return this.tglist.bind("change remove", function() {
         var args;
         args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
         console.log("Changed!", args);
@@ -415,8 +415,7 @@
       pat = $("#manage-groups-template").text();
       this.tmplManageGroups = Handlebars.compile(pat);
       return app.topicGroups.bind("change remove", function() {
-        _this.render();
-        return _this.$(".rootlist").listview();
+        return _this.render();
       });
     };
 
@@ -427,7 +426,8 @@
       };
       console.log(context);
       h = this.tmplManageGroups(context);
-      return this.$el.html(h);
+      this.$el.html(h);
+      return this.$(".rootlist").listview();
     };
 
     VManageGroups.prototype.modelByCid = function(cid) {
@@ -441,13 +441,8 @@
     };
 
     VManageGroups.prototype.switchToGroupEditor = function(m) {
-      var _this = this;
-      app.vGroupEditor.model = m;
-      app.vGroupEditor.render();
-      return _.defer(function() {
-        $.mobile.changePage("#pagegroupeditor");
-        return app.vGroupEditor.updateList();
-      });
+      app.vGroupEditor.setModel(m);
+      return $.mobile.changePage("#pagegroupeditor");
     };
 
     VManageGroups.prototype.doNewGroup = function(ev) {
@@ -458,7 +453,7 @@
         topics: []
       });
       this.switchToGroupEditor(m);
-      return app.vGroupEditor.model = m;
+      return app.vGroupEditor.setModel(m);
     };
 
     return VManageGroups;
@@ -497,7 +492,8 @@
     VGroupEditor.prototype.updateList = function() {
       var ul;
       ul = this.$(".rootlist");
-      return ul.listview();
+      ul.listview();
+      return ul.listview("refresh");
     };
 
     VGroupEditor.prototype.render = function() {
@@ -508,7 +504,22 @@
       }
       context = this.model.toJSON();
       h = this.tmpl(context);
-      return this.$el.html(h);
+      this.$el.html(h);
+      return this.updateList();
+    };
+
+    VGroupEditor.prototype.setModel = function(m) {
+      var _this = this;
+      this.model = m;
+      this.render();
+      m.on("all", function() {
+        var args;
+        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        return console.log("m change", args);
+      });
+      return m.on("change", function() {
+        return _this.render();
+      });
     };
 
     VGroupEditor.prototype.doAddCat = function(ev) {
@@ -520,12 +531,8 @@
       }
       m = this.model;
       topics = m.get("topics");
-      console.log("add to", topics);
-      topics.push(t);
-      m.set("topics", topics);
-      m.save();
-      this.render();
-      return this.updateList();
+      m.set("topics", topics.concat([t]));
+      return m.save();
     };
 
     VGroupEditor.prototype.doRemoveCat = function(ev) {
@@ -537,9 +544,7 @@
       m = this.model;
       topics = _.without(m.get("topics"), toRemove);
       m.set("topics", topics);
-      m.save();
-      this.render();
-      return this.updateList();
+      return m.save();
     };
 
     VGroupEditor.prototype.doChangeGroupName = function(ev) {
