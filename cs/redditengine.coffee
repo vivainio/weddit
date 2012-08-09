@@ -97,8 +97,7 @@ class RTopicGroupView extends Backbone.View
         $(".tg-current-choice").removeClass "tg-current-choice"
         elem.addClass "tg-current-choice"
         
-    doSelectGroup: (ev) ->
-        
+    doSelectGroup: (ev) ->        
         trg = $(ev.target)
         cid = trg.data("cid")
         @makeCurrent trg
