@@ -438,7 +438,8 @@
     VGroupEditor.prototype.el = "#group-editor-area";
 
     VGroupEditor.prototype.events = {
-      "click #btnAdd": "doAddCat"
+      "click #btnAdd": "doAddCat",
+      "click .aRemoveCat": "doRemoveCat"
     };
 
     VGroupEditor.prototype.initialize = function() {
@@ -477,7 +478,23 @@
       console.log("add to", topics);
       topics.push(t);
       m.set("topics", topics);
-      return m.save();
+      m.save();
+      this.render();
+      return this.updateList();
+    };
+
+    VGroupEditor.prototype.doRemoveCat = function(ev) {
+      var elem, m, toRemove, topics, ul;
+      elem = $(ev.currentTarget);
+      toRemove = elem.text();
+      console.log("Remove cat", toRemove);
+      ul = this.$(".rootlist");
+      m = this.model;
+      topics = _.without(m.get("topics"), toRemove);
+      m.set("topics", topics);
+      m.save();
+      this.render();
+      return this.updateList();
     };
 
     return VGroupEditor;

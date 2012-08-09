@@ -283,6 +283,7 @@ class VGroupEditor extends Backbone.View
     
     events:
         "click #btnAdd": "doAddCat"
+        "click .aRemoveCat": "doRemoveCat"
         
     initialize: ->
         _.bindAll @
@@ -317,6 +318,23 @@ class VGroupEditor extends Backbone.View
         topics.push t
         m.set "topics", topics
         m.save()
+        @render()
+        @updateList()
+        
+    doRemoveCat: (ev) ->
+        elem =  $(ev.currentTarget)
+        toRemove = elem.text()
+        console.log "Remove cat", toRemove
+        ul = @.$(".rootlist")
+        m = @model
+        topics = _.without m.get("topics"), toRemove
+        m.set "topics", topics
+        m.save()
+        @render()
+        @updateList()
+        
+        
+        
         
         
 class RedditEngine    

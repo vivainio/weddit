@@ -138,7 +138,7 @@
 	<p>Subreddits</p>
 	<ul class="rootlist" data-role="listview">
 	    {{#each topics}}
-	    <li>{{this}}</li>
+	    <li data-icon="delete"><a class="aRemoveCat" href="#">{{this}}</a></li>
 	    {{/each}}
 	    <li>
 		<div data-role="fieldcontain">
