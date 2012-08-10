@@ -20,8 +20,8 @@ class App
                   
         $("#btnWizardCreate").on "click", =>            
             console.log "wizard mode!"
-            @tgview.addTg "Humor",["pics", "fffffffuuuuuuuuuuuu", "funny"]
-            @tgview.addTg "Code",["programming", "html5", "javascript", "webdev"]
+            @tgview.addTg "Casual",["frontpage", "pics", "fffffffuuuuuuuuuuuu", "funny", "AdviceAnimals"]
+            @tgview.addTg "Code",["programming", "webdev", "javascript", "web_design", "html5", "coffeescript", "python"]
             
         
         @shownCategories = new RCatList

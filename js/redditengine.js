@@ -24,8 +24,8 @@
       }
       $("#btnWizardCreate").on("click", function() {
         console.log("wizard mode!");
-        _this.tgview.addTg("Humor", ["pics", "fffffffuuuuuuuuuuuu", "funny"]);
-        return _this.tgview.addTg("Code", ["programming", "html5", "javascript", "webdev"]);
+        _this.tgview.addTg("Casual", ["frontpage", "pics", "fffffffuuuuuuuuuuuu", "funny", "AdviceAnimals"]);
+        return _this.tgview.addTg("Code", ["programming", "webdev", "javascript", "web_design", "html5", "coffeescript", "python"]);
       });
       this.shownCategories = new RCatList;
       root.redditengine = reng = new RedditEngine();
