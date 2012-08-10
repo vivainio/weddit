@@ -22,7 +22,8 @@ class App
                   
         $("#btnWizardCreate").on "click", =>                        
             @tgview.addTg "Casual",["frontpage", "pics", "fffffffuuuuuuuuuuuu", "funny", "AdviceAnimals"]
-            @tgview.addTg "Code",["programming", "webdev", "javascript", "web_design", "html5", "coffeescript", "python"]            
+            @tgview.addTg "Code",["programming", "webdev", "javascript", "web_design", "html5", "coffeescript", "python"]
+            $("#pagesetupwizard").dialog("close")
             
         
         @shownCategories = new RCatList
