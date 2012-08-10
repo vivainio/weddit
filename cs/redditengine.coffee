@@ -1,5 +1,9 @@
 root = window 
 
+window.log = ->
+	console.log Array::slice.call arguments if @console
+	return
+
 class App
     start: ->
 
@@ -18,8 +22,7 @@ class App
                 
                 #alert ("No groups!")
                   
-        $("#btnWizardCreate").on "click", =>            
-            console.log "wizard mode!"
+        $("#btnWizardCreate").on "click", =>                        
             @tgview.addTg "Casual",["frontpage", "pics", "fffffffuuuuuuuuuuuu", "funny", "AdviceAnimals"]
             @tgview.addTg "Code",["programming", "webdev", "javascript", "web_design", "html5", "coffeescript", "python"]
             
@@ -42,8 +45,7 @@ class App
 
         @vGroupEditor = ge = new VGroupEditor
         
-        EventDispatcher.bind "selectCategories", (ev, cats) =>
-            console.log cats
+        EventDispatcher.bind "selectCategories", (ev, cats) =>            
             mv.setCategories (cats)
             mv.render()
             reng.fetchAll()
@@ -57,8 +59,6 @@ EventDispatcher = $({})
 app = new App()
 
 
-logg = ->
-    1
 
 collectionToJson = (coll)->    
     coll.map (m) ->
@@ -92,20 +92,19 @@ class RTopicGroupView extends Backbone.View
         pat = $("#topic-group-template").html()
         @template = Handlebars.compile pat        
         @tglist = app.topicGroups
-        @tglist.bind "change remove", (args...) =>
-            console.log "Changed!",args
+        @tglist.bind "change remove", (args...) =>            
             @render()
         
     render: ->
         @$el.empty()
-        #console.log JSON.stringify @tglist.toJSON()
+        
         @tglist.each (m) =>
             rend = @template
                 tgname: m.get "groupName"
                 topics: m.get "topics"
                 tgid: m.cid
                 
-            logg "Rendered",rend
+            
             @$el.append rend
             
     addTg: (name, topics) ->
@@ -131,8 +130,7 @@ class RTopicGroupView extends Backbone.View
     doSelectTopic: (ev) ->
         trg = $(ev.target)
         @makeCurrent trg
-        topic = trg.text()
-        console.log "topic", topic
+        topic = trg.text()        
         EventDispatcher.trigger "selectCategories", [[topic]]
         
 
@@ -178,8 +176,7 @@ class RCatListView extends Backbone.View
             nv = new RCatView el: r
             @singlecatviews[name] = nv
             
-    
-        #console.log ["catlistview render", all]
+            
         
         @$el.append(all)
         
@@ -220,8 +217,7 @@ class RCatView extends Backbone.View
         cid = $(ev.currentTarget).parent().data("cid")
         
         m = @modelByCid cid
-        plink = m.get "permalink"
-        console.log ["comments!", m, m.get "permalink" ]
+        plink = m.get "permalink"        
         
         fullurl = "http://reddit.com" + plink+".compact"
         @openWindow fullurl
@@ -296,8 +292,7 @@ class VManageGroups extends Backbone.View
         
 
     render: ->        
-        context = { groups: collectionToJson app.topicGroups }
-        console.log context
+        context = { groups: collectionToJson app.topicGroups }        
         h = @tmplManageGroups context
         @$el.html h
         #@.$(".rootlist").listview()
@@ -322,8 +317,7 @@ class VManageGroups extends Backbone.View
         #    app.vGroupEditor.updateList()
         
         
-    doNewGroup: (ev) ->
-        console.log "Add new group"
+    doNewGroup: (ev) ->        
         m = app.topicGroups.create groupName: "<untitled>", topics: []
         #app.tgview.render()
         #app.vManageGroups.render()
@@ -345,8 +339,7 @@ class VGroupEditor extends Backbone.View
         pat = $("#group-editor-template").text()
         @tmpl = Handlebars.compile pat
     
-        $("#btnDeleteGroup").on "click", =>
-            console.log "Delete group!"
+        $("#btnDeleteGroup").on "click", =>            
             #app.topicGroups.remove @model
             @model.destroy()
             history.back()
@@ -357,22 +350,19 @@ class VGroupEditor extends Backbone.View
         #$("#pagegroupeditor").on "pagebeforecreate", =>
         #    @render()
         
-    doCheckGroupName: ->
-        console.log "Check!"
+    doCheckGroupName: ->        
         b = $("#btnApplyChangeGroupName")
         t = $("#inpGroupName").val()
         kl = 'ui-disabled'
         ref = false
         if t != @model.get "groupName"
-            if b.hasClass kl
-                console.log "enabling"
+            if b.hasClass kl                
                 b.removeClass "ui-disabled"
                 ref = true
                 
         else
             if not b.hasClass kl
-                b.addClass "ui-disabled"
-                console.log "disabling"
+                b.addClass "ui-disabled"                
                 ref = true
                 
             
@@ -382,8 +372,7 @@ class VGroupEditor extends Backbone.View
         ul.listview()
         ul.listview("refresh")
         
-    render: ->
-        console.log "render"
+    render: ->        
         if not @model
             return
             
@@ -396,16 +385,13 @@ class VGroupEditor extends Backbone.View
     setModel: (m)->
         @model = m
         @render()
-        m.on "all", (args...) =>
-            console.log "m change",args
         m.on "change", =>
             @render()
         @doCheckGroupName()
         
     doAddCat: (ev) ->
         
-        t = $("#inpNewCategory").val()
-        console.log "add cat",t
+        t = $("#inpNewCategory").val()        
         if t.length < 1
             return
         m = @model
@@ -419,8 +405,7 @@ class VGroupEditor extends Backbone.View
         
     doRemoveCat: (ev) ->
         elem =  $(ev.currentTarget)
-        toRemove = elem.text()
-        console.log "Remove cat", toRemove
+        toRemove = elem.text()        
         ul = @.$(".rootlist")
         m = @model
         topics = _.without m.get("topics"), toRemove
@@ -431,8 +416,7 @@ class VGroupEditor extends Backbone.View
         #@updateList()
         
     doChangeGroupName: (ev) ->
-        t = $("#inpGroupName").val()
-        console.log "Change to",t
+        t = $("#inpGroupName").val()        
         @model.set "groupName", t
         @model.save()
         @doCheckGroupName()
@@ -497,6 +481,6 @@ root.RedditEngine = RedditEngine
 reng = null
     
 $ ->
-    logg "starting up"
+    log "starting up"
     app.start()
     
