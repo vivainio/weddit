@@ -79,14 +79,16 @@
 
 <!-- http://jsfiddle.net/vivainio/K3vzP/ -->
 <script id="manage-groups-template" type="text/x-handlebars-template">
-    <ul class="rootlist" data-role="listview" data-theme="g">
+    <ul class="rootlist" data-role="listview" data-theme="c">
     {{#each groups}}    
 	<li class="topic-group-item" data-cid="{{cid}}">
 	    <a href="#">
-	    <h1>{{groupName}}</h1>
+	    <h2>{{groupName}}</h2>
+		<p>
 		{{#each topics}}
 		<span>{{this}}&nbsp;</span>
-		{{/each}}        
+		{{/each}}
+		</p>
 	    </a>
 	    
 	</li>
