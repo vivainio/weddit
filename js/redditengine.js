@@ -320,7 +320,8 @@
     };
 
     RCatView.prototype.openWindow = function(url) {
-      return window.open(url);
+      $("#previewIframe").attr("src", url);
+      return $.mobile.changePage("#pagepreview");
     };
 
     RCatView.prototype.doSelect = function(ev) {
