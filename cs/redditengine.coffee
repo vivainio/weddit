@@ -15,16 +15,14 @@ class App
         @topicGroups.fetch()
         
         if not @topicGroups.length
-            _.defer =>
+            _.delay (=>                              
+                $.mobile.changePage "#pagesetupwizard"), 500
                 
-                #d = $("#pagesetupwizard").dialog({autoOpen: true})
-                $.mobile.changePage "#pagesetupwizard"
                 
-                #alert ("No groups!")
                   
         $("#btnWizardCreate").on "click", =>                        
             @tgview.addTg "Casual",["frontpage", "pics", "fffffffuuuuuuuuuuuu", "funny", "AdviceAnimals"]
-            @tgview.addTg "Code",["programming", "webdev", "javascript", "web_design", "html5", "coffeescript", "python"]
+            @tgview.addTg "Code",["programming", "webdev", "javascript", "web_design", "html5", "coffeescript", "python"]            
             
         
         @shownCategories = new RCatList

@@ -24,9 +24,9 @@
       this.topicGroups = new RTopicGroupList;
       this.topicGroups.fetch();
       if (!this.topicGroups.length) {
-        _.defer(function() {
+        _.delay((function() {
           return $.mobile.changePage("#pagesetupwizard");
-        });
+        }), 500);
       }
       $("#btnWizardCreate").on("click", function() {
         _this.tgview.addTg("Casual", ["frontpage", "pics", "fffffffuuuuuuuuuuuu", "funny", "AdviceAnimals"]);
