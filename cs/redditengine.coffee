@@ -338,6 +338,7 @@ class VGroupEditor extends Backbone.View
         "click #btnAdd": "doAddCat"
         "click .aRemoveCat": "doRemoveCat"
         "click #btnApplyChangeGroupName" : "doChangeGroupName"
+        "keyup #inpGroupName" : "doCheckGroupName"
         
     initialize: ->
         _.bindAll @
@@ -352,8 +353,29 @@ class VGroupEditor extends Backbone.View
             
     
         
+        
         #$("#pagegroupeditor").on "pagebeforecreate", =>
         #    @render()
+        
+    doCheckGroupName: ->
+        console.log "Check!"
+        b = $("#btnApplyChangeGroupName")
+        t = $("#inpGroupName").val()
+        kl = 'ui-disabled'
+        ref = false
+        if t != @model.get "groupName"
+            if b.hasClass kl
+                console.log "enabling"
+                b.removeClass "ui-disabled"
+                ref = true
+                
+        else
+            if not b.hasClass kl
+                b.addClass "ui-disabled"
+                console.log "disabling"
+                ref = true
+                
+            
         
     updateList: ->
         ul = @.$(".rootlist")        
@@ -378,7 +400,7 @@ class VGroupEditor extends Backbone.View
             console.log "m change",args
         m.on "change", =>
             @render()
-        
+        @doCheckGroupName()
         
     doAddCat: (ev) ->
         
@@ -413,6 +435,7 @@ class VGroupEditor extends Backbone.View
         console.log "Change to",t
         @model.set "groupName", t
         @model.save()
+        @doCheckGroupName()
         
         
         

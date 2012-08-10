@@ -477,7 +477,8 @@
     VGroupEditor.prototype.events = {
       "click #btnAdd": "doAddCat",
       "click .aRemoveCat": "doRemoveCat",
-      "click #btnApplyChangeGroupName": "doChangeGroupName"
+      "click #btnApplyChangeGroupName": "doChangeGroupName",
+      "keyup #inpGroupName": "doCheckGroupName"
     };
 
     VGroupEditor.prototype.initialize = function() {
@@ -491,6 +492,28 @@
         _this.model.destroy();
         return history.back();
       });
+    };
+
+    VGroupEditor.prototype.doCheckGroupName = function() {
+      var b, kl, ref, t;
+      console.log("Check!");
+      b = $("#btnApplyChangeGroupName");
+      t = $("#inpGroupName").val();
+      kl = 'ui-disabled';
+      ref = false;
+      if (t !== this.model.get("groupName")) {
+        if (b.hasClass(kl)) {
+          console.log("enabling");
+          b.removeClass("ui-disabled");
+          return ref = true;
+        }
+      } else {
+        if (!b.hasClass(kl)) {
+          b.addClass("ui-disabled");
+          console.log("disabling");
+          return ref = true;
+        }
+      }
     };
 
     VGroupEditor.prototype.updateList = function() {
@@ -521,9 +544,10 @@
         args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
         return console.log("m change", args);
       });
-      return m.on("change", function() {
+      m.on("change", function() {
         return _this.render();
       });
+      return this.doCheckGroupName();
     };
 
     VGroupEditor.prototype.doAddCat = function(ev) {
@@ -556,7 +580,8 @@
       t = $("#inpGroupName").val();
       console.log("Change to", t);
       this.model.set("groupName", t);
-      return this.model.save();
+      this.model.save();
+      return this.doCheckGroupName();
     };
 
     return VGroupEditor;
