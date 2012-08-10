@@ -34,7 +34,8 @@
         return $("#pagesetupwizard").dialog("close");
       });
       $("#pagepreview").on("click", function() {
-        return _this.mobile.changePage("#pagemain");
+        $.mobile.changePage("#pagemain");
+        return $("#previewIframe").attr("src", "");
       });
       this.shownCategories = new RCatList;
       root.redditengine = reng = new RedditEngine();

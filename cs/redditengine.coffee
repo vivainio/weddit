@@ -27,7 +27,8 @@ class App
             
 
         $("#pagepreview").on "click", =>
-            @.mobile.changePage "#pagemain"
+            $.mobile.changePage "#pagemain"
+            $("#previewIframe").attr "src", ""
             
         @shownCategories = new RCatList
         
