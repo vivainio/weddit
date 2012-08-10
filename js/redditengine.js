@@ -33,6 +33,9 @@
         _this.tgview.addTg("Code", ["programming", "webdev", "javascript", "web_design", "html5", "coffeescript", "python"]);
         return $("#pagesetupwizard").dialog("close");
       });
+      $("#pagepreview").on("click", function() {
+        return _this.mobile.changePage("#pagemain");
+      });
       this.shownCategories = new RCatList;
       root.redditengine = reng = new RedditEngine();
       this.tgview = tg = new RTopicGroupView;
@@ -320,7 +323,9 @@
     };
 
     RCatView.prototype.openWindow = function(url) {
-      $("#previewIframe").attr("src", url);
+      var fr;
+      fr = $("#previewIframe");
+      fr.attr("src", url);
       return $.mobile.changePage("#pagepreview");
     };
 

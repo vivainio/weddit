@@ -25,7 +25,10 @@ class App
             @tgview.addTg "Code",["programming", "webdev", "javascript", "web_design", "html5", "coffeescript", "python"]
             $("#pagesetupwizard").dialog("close")
             
-        
+
+        $("#pagepreview").on "click", =>
+            @.mobile.changePage "#pagemain"
+            
         @shownCategories = new RCatList
         
         root.redditengine = reng = new RedditEngine()
@@ -200,8 +203,12 @@ class RCatView extends Backbone.View
         
         
     openWindow: (url) ->
-        $("#previewIframe").attr "src", url
+        fr = $("#previewIframe")
+        fr.attr "src", url
         $.mobile.changePage "#pagepreview"
+        
+        #resizeIframeWidth(fr.get(0))
+        
         #window.open url
         
     doSelect: (ev) ->
