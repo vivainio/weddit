@@ -30,28 +30,9 @@
     top: 0px;    
 }
 
-/*
-.linkpic {
-    float: left;
-    border-style: none;
-}
-
-.linkpic.nopic {
-    display: none
-}
-*/
-
-/*
 .linkcontainer {
-    clear:left;
-    min-height: 60px
+    min-height: 80px
 }
-
-
-.catlist-heading {
-    clear: left;
-}
-*/
 
 .tg-topic, .tg-name {
     color: #3E6D8E;

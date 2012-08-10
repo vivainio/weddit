@@ -31,7 +31,8 @@
 <!-- scripts -->
 <script id="link-template" type="text/x-handlebars-template">
 
-<li class="linkcontainer" data-cid="{{cid}}">		  
+<li class="linkcontainer" data-cid="{{cid}}" data-icon="false">
+  <a href="#">
   {{#if linkimg}}
   <img class="linkpic" height="60" width="60" src="{{linkimg}}"></img>
   {{/if}}
@@ -40,6 +41,7 @@
   <span class="linkcomments ui-li-count"> {{linkcomments}}</span>
   <div class="linkscore">{{linkscore}}</div>
   <div class="rightedge"></div>
+  </a>
 </li>		
 </script>
 <script id="catlist-template" type="text/x-handlebars-template">

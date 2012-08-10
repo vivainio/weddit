@@ -249,7 +249,7 @@ class RCatView extends Backbone.View
         expanded
     
     render: ->
-        all = $('<ul data-role="listview" data-theme="g">')
+        all = $('<ul data-role="listview" data-theme="c">')
         @coll.each (m) =>
             all.append $(@renderOne(m))
                 

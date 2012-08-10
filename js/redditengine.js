@@ -368,7 +368,7 @@
     RCatView.prototype.render = function() {
       var all,
         _this = this;
-      all = $('<ul data-role="listview" data-theme="g">');
+      all = $('<ul data-role="listview" data-theme="c">');
       this.coll.each(function(m) {
         return all.append($(_this.renderOne(m)));
       });
