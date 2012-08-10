@@ -198,7 +198,7 @@ class RCatView extends Backbone.View
         
     modelByCid: (cid) -> @coll.getByCid cid
         
-        l
+        
     openWindow: (url) ->
         $("#previewIframe").attr "src", url
         $.mobile.changePage "#pagepreview"
