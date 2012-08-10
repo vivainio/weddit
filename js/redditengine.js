@@ -353,11 +353,15 @@
     };
 
     RCatView.prototype.renderOne = function(m) {
-      var expanded;
+      var expanded, thumb;
+      thumb = m.get("thumbnail");
+      if (thumb === "default" || thumb === "self") {
+        thumb = "";
+      }
       expanded = this.linktmpl({
         linkdesc: m.get("title"),
         linkscore: m.get("score"),
-        linkimg: m.get("thumbnail"),
+        linkimg: thumb,
         linkcomments: m.get("num_comments"),
         cid: m.cid
       });
@@ -373,8 +377,7 @@
       });
       this.$el.empty();
       this.$el.append(all);
-      all.listview();
-      return all.listview("refresh");
+      return this.$el.trigger("create");
     };
 
     RCatView.prototype.mkModel = function(d) {
@@ -428,7 +431,7 @@
       console.log(context);
       h = this.tmplManageGroups(context);
       this.$el.html(h);
-      return this.$(".rootlist").listview();
+      return this.$el.trigger("create");
     };
 
     VManageGroups.prototype.modelByCid = function(cid) {
@@ -506,7 +509,7 @@
       context = this.model.toJSON();
       h = this.tmpl(context);
       this.$el.html(h);
-      return this.updateList();
+      return this.$el.trigger("create");
     };
 
     VGroupEditor.prototype.setModel = function(m) {

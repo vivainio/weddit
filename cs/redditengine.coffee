@@ -1,4 +1,4 @@
-root = window
+root = window 
 
 class App
     start: ->
@@ -236,12 +236,18 @@ class RCatView extends Backbone.View
         @linktmpl = Handlebars.compile pat
         
         
-    renderOne: (m) ->    
+    renderOne: (m) ->
+        thumb = m.get "thumbnail"
+        #console.log thumb
+        if thumb in ["default", "self"]
+            #console.log "squash because",thumb
+            thumb = ""
+            
         expanded = @linktmpl
         
             linkdesc: m.get "title"
             linkscore: m.get "score"
-            linkimg: m.get "thumbnail"
+            linkimg: thumb            
             linkcomments: m.get "num_comments"
             cid: m.cid
             
@@ -255,8 +261,9 @@ class RCatView extends Backbone.View
         
         @$el.empty()
         @$el.append all
-        all.listview()
-        all.listview("refresh")
+        @$el.trigger "create"
+        #all.listview()
+        #all.listview("refresh")
 
     mkModel: (d) ->
         m = new RLink
@@ -293,7 +300,8 @@ class VManageGroups extends Backbone.View
         console.log context
         h = @tmplManageGroups context
         @$el.html h
-        @.$(".rootlist").listview()
+        #@.$(".rootlist").listview()
+        @$el.trigger "create"
         
         
     modelByCid: (cid) -> app.topicGroups.getByCid cid
@@ -360,7 +368,8 @@ class VGroupEditor extends Backbone.View
         context = @model.toJSON()
         h = @tmpl context
         @$el.html h
-        @updateList()
+        @$el.trigger "create"
+        #@updateList()
         
     setModel: (m)->
         @model = m
